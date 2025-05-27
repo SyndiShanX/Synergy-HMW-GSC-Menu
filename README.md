@@ -12,9 +12,9 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 ### Requirements: [HorizonMW](https://horizonmw.org/)
 
 #### Installation:
-* Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc) and [rank_patches.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/rank_patches.gsc)
+* Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc) and [patches.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/patches.gsc)
 
-* Place them into `hmw-mod/scripts/mp`
+* Place them into `hmw-mod/scripts/mp`, then Load into a Private Match and Enjoy
 
 * If you aren't the Host of the Game the Menu won't work
 

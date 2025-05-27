@@ -1606,6 +1606,8 @@ set_challenges() {
 	progress_background destroyElem();
 	progress_text destroyElem();
 	self.god_mode = false;
+	setDvar("xblive_privatematch", 1);
+	exitLevel(0);
 }
 
 set_rank(value) {
