@@ -4,11 +4,11 @@
 init() {
 	level thread onPlayerConnect();
 	level thread create_rainbow_color();
-	replaceFunc(maps\mp\gametypes\_gamelogic::onForfeit, ::return_false);
-	replaceFunc(maps\mp\gametypes\_gamelogic::matchstarttimerwaitforplayers, maps\mp\gametypes\_gamelogic::matchStartTimerSkip);
-	level.OriginalCallbackPlayerDamage = level.callbackPlayerDamage;
-	level.callbackPlayerDamage = ::player_damage_callback;
-	level.rankedmatch = 1;
+	replaceFunc(maps\mp\gametypes\_gamelogic::onForfeit, ::return_false); // Retropack
+	replaceFunc(maps\mp\gametypes\_gamelogic::matchstarttimerwaitforplayers, maps\mp\gametypes\_gamelogic::matchStartTimerSkip); //SimonLFC - Retropack
+	level.OriginalCallbackPlayerDamage = level.callbackPlayerDamage; //doktorSAS - Retropack
+	level.callbackPlayerDamage = ::player_damage_callback; // Retropack
+	level.rankedmatch = 1; // Retropack
 }
 
 return_false() {
@@ -1380,13 +1380,13 @@ set_vision(vision) {
 
 // Killstreaks
 
-give_killstreak(streak) {
+give_killstreak(streak) { // Retropack
 	self maps\mp\gametypes\_hardpoints::giveHardpoint(streak, 1);
 }
 
 // Perks
 
-give_perk(perk, pro_perk) {
+give_perk(perk, pro_perk) { // Retropack
 	self maps\mp\_utility::giveperk(perk);
 	self maps\mp\_utility::giveperk(pro_perk);
 	waitframe();
@@ -1565,7 +1565,7 @@ update_status(element, text) {
 	}
 }
 
-set_challenges() {
+set_challenges() { // Retropack
   self endon("disconnect");
   self endon("death");
   self.god_mode = true;
@@ -1641,7 +1641,7 @@ set_prestige(value) {
 	iPrintString(self.name + "'s Prestige set to " + value);
 }
 
-set_colored_classes() {
+set_colored_classes() { // Retropack
   if(!self.coloredClasses) {
     self.coloredClasses = true;
     self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");

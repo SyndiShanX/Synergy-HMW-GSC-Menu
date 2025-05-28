@@ -22,6 +22,8 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 
 This menu is based on [M203](https://github.com/Xeirh/M203) by [Xeirh](https://github.com/Xeirh)
 
+Some functions are from [Retropack](https://github.com/justinabellera/retro-pack) by [Rtros](https://github.com/justinabellera)
+
 - Apparition Structure Team:
   * `CF4_99` Main developer
   * `Extinct` Ideas, suggestions, constructive criticism
