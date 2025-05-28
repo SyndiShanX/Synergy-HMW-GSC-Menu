@@ -8,6 +8,9 @@ If you use any Code from my Menu, your Menu also has to be Open-Source as per th
 
 If you have any Issues/Suggestions, please Submit them in [Issues](https://github.com/SyndiShanX/Synergy-HMW-GSC-Menu/issues)
 
+#### Youtube Showcase:
+
+[![Showcase](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Youtube-Thumbnail.png)](https://www.youtube.com/watch?v=zl6GYaUhwy8 "Horizon MW | Synergy GSC Mod Menu")
 
 ### Requirements: [HorizonMW](https://horizonmw.org/)
 

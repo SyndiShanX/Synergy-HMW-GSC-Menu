@@ -355,8 +355,10 @@ add_increment(text, function, start, minimum, maximum, increment, text_slider, s
 	option.text = text;
 	option.function = function;
 	option.slider = true;
-	option.text_slider = text_slider;
-	option.slider_text = slider_text;
+	if(isDefined(text_slider)) {
+		option.text_slider = text_slider;
+		option.slider_text = slider_text;
+	}
 	option.start = start;
 	option.minimum = minimum;
 	option.maximum = maximum;
@@ -454,6 +456,8 @@ initial_variable() {
 	// Killstreaks
 	self.syn["killstreaks"][0] = ["radar_mp", "airdrop_marker_mp", "counter_radar_mp", "predator_mp", "sentry_mp", "airstrike_mp", "harrier_airstrike_mp", "helicopter_mp", "airdrop_mega_marker_mp", "advanced_uav_mp", "pavelow_mp", "stealth_airstrike_mp", "ah6_mp", "reaper_mp", "ac130_mp", "chopper_gunner_mp", "emp_mp", "nuke_mp"];
 	self.syn["killstreaks"][1] = ["UAV", "Care Package", "Counter-UAV", "Predator Missile", "Sentry Gun", "Precision Airstrike", "Harrier", "Attack Helicopter", "Emergency Airdrop", "Advanced UAV", "Pavelow", "Stealth Bomber", "AH6 Overwatch", "Reaper", "AC130", "Chopper Gunner", "EMP", "Tactical Nuke"];
+	
+	self.syn["stat_increment"] = 100;
 	
 	self.syn["utility"].interaction = true;
 	
@@ -955,6 +959,33 @@ menu_index() {
 				self add_increment("Set Level", ::set_rank, 0, 0, 70, 1);
 			}
 			
+			self add_option("Set Stats", ::new_menu, "Set Stats");
+			
+			break;
+		case "Set Stats":
+			self add_menu(menu, menu.size);
+			
+			self add_increment("Set Increment", ::set_increment, 100, 100, 10000, 100);
+			
+			self add_increment("Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "kills");
+			self add_increment("Deaths", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "deaths");
+			self add_increment("Assists", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "assists");
+			self add_increment("Highest Killstreak", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "killStreak");
+			self add_increment("Melee Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "meleeKills");
+			self add_increment("Environment Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "destructibleKills");
+			
+			self add_increment("Bullets Hit", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "hits");
+			self add_increment("Bullets Missed", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "misses");
+			
+			self add_increment("Wins", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "wins");
+			self add_increment("Losses", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "losses");
+			self add_increment("Score", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "score");
+			
+			self add_increment("Time Played Rangers", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedAllies");
+			self add_increment("Time Played Opfor", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedOpfor");
+			self add_increment("Time Played Other", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedOther");
+			self add_increment("Time Played Total", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedTotal");
+			
 			break;
 		case "Give Killstreaks":
 			self add_menu(menu, menu.size);
@@ -1212,6 +1243,10 @@ hide_ui() {
 hide_weapon() {
 	self.hide_weapon = !return_toggle(self.hide_weapon);
 	setDvar("cg_drawgun", !self.hide_weapon);
+}
+
+set_increment(value) {
+	self.syn["stat_increment"] = value;
 }
 
 // Basic Options
@@ -1672,4 +1707,8 @@ set_colored_classes() { // Retropack
 		progress_background destroyElem();
 		progress_text destroyElem();
   }
+}
+
+set_stat(value, stat_name) {
+	self setplayerdata( common_scripts\utility::getstatsgroup_ranked(), stat_name, value);
 }
