@@ -288,7 +288,7 @@ clear_all(array) {
 		}
 	}
 	
-	for(x = 0; x < 15; x++) {
+	for(x = 0; x < 25; x++) {
 		if(isDefined(self.syn["hud"]["arrow"][0][x])) {
 			self.syn["hud"]["arrow"][0][x] destroy();
 			self.syn["hud"]["arrow"][1][x] destroy();
@@ -622,7 +622,7 @@ create_option() {
 				self.syn["hud"]["toggle"][1][index] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 4), (self.syn["utility"].y_offset + ((i * self.syn["utility"].option_spacing) + 17)), 8, 8, color[1], 1, 10); // Toggle Box
 			}
 			
-			for(x = 0; x < 15; x++) {
+			for(x = 0; x < 25; x++) {
 				if(x != self get_cursor()) {
 					if(isDefined(self.syn["hud"]["arrow"][0][x])) {
 						self.syn["hud"]["arrow"][0][x] destroy();
@@ -899,6 +899,8 @@ menu_index() {
 		case "Synergy":
 			self add_menu(menu, menu.size, menu.size);
 			
+			self.syn["utility"].option_limit = 10;
+			
 			self.syn["hud"]["title"][0].x = self.syn["utility"].x_offset + 86;
 			
 			self add_option("Basic Options", ::new_menu, "Basic Options");
@@ -923,12 +925,12 @@ menu_index() {
 			self add_toggle("Super Jump", ::super_jump, self.super_jump);
 			self add_increment("Set Speed", ::set_speed, 190, 190, 990, 50);
 			
-			self add_option("Suicide", ::commit_suicide);
-			self add_option("End Game", ::end_game);
-			
 			self add_toggle("Fullbright", ::fullbright, self.fullbright);
 			self add_toggle("Third Person", ::third_person, self.third_person);
 			self add_option("Visions", ::new_menu, "Visions");
+			
+			self add_option("Suicide", ::commit_suicide);
+			self add_option("End Game", ::end_game);
 			
 			break;
 		case "Weapon Options":
@@ -948,7 +950,8 @@ menu_index() {
 		case "Account Options":
 			self add_menu(menu, menu.size);
 			
-			self add_option("Unlock All", ::set_challenges);
+			self.syn["utility"].option_limit = 10;
+			
 			self add_option("Colored Classes", ::set_colored_classes);
 			
 			self add_increment("Set Prestige", ::set_prestige, 0, 0, 10, 1);
@@ -959,32 +962,29 @@ menu_index() {
 				self add_increment("Set Level", ::set_rank, 0, 0, 70, 1);
 			}
 			
+			self add_option("Unlock All", ::set_challenges);
+			
 			self add_option("Set Stats", ::new_menu, "Set Stats");
 			
 			break;
 		case "Set Stats":
 			self add_menu(menu, menu.size);
 			
+			self.syn["utility"].option_limit = 5;
+			
 			self add_increment("Set Increment", ::set_increment, 100, 100, 10000, 100);
 			
-			self add_increment("Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "kills");
-			self add_increment("Deaths", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "deaths");
-			self add_increment("Assists", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "assists");
-			self add_increment("Highest Killstreak", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "killStreak");
-			self add_increment("Melee Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "meleeKills");
-			self add_increment("Environment Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "destructibleKills");
+			self add_increment("Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "kills", "Kills");
+			self add_increment("Deaths", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "deaths", "Deaths");
+			self add_increment("Assists", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "assists", "Assists");
+			self add_increment("Melee Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "meleeKills", "Melee Kills");
+			self add_increment("Environment Kills", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "destructibleKills", "Environment Kills");
 			
-			self add_increment("Bullets Hit", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "hits");
-			self add_increment("Bullets Missed", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "misses");
+			self add_increment("Wins", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "wins", "Wins");
+			self add_increment("Losses", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "losses", "Losses");
+			self add_increment("Games Played", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "gamesPlayed", "Games Played");
 			
-			self add_increment("Wins", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "wins");
-			self add_increment("Losses", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "losses");
-			self add_increment("Score", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "score");
-			
-			self add_increment("Time Played Rangers", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedAllies");
-			self add_increment("Time Played Opfor", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedOpfor");
-			self add_increment("Time Played Other", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedOther");
-			self add_increment("Time Played Total", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "timePlayedTotal");
+			self add_increment("Score", ::set_stat, 0, 0, 100000, self.syn["stat_increment"], undefined, undefined, "score", "Score");
 			
 			break;
 		case "Give Killstreaks":
@@ -1202,7 +1202,7 @@ iPrintString(string) {
 
 modify_x_position(offset) {
 	self.syn["utility"].x_offset = 160 + offset;
-	for(x = 0; x < 15; x++) {
+	for(x = 0; x < 25; x++) {
 		if(isDefined(self.syn["hud"]["arrow"][0][x])) {
 			self.syn["hud"]["arrow"][0][x] destroy();
 			self.syn["hud"]["arrow"][1][x] destroy();
@@ -1214,7 +1214,7 @@ modify_x_position(offset) {
 
 modify_y_position(offset) {
 	self.syn["utility"].y_offset = -60 + offset;
-	for(x = 0; x < 15; x++) {
+	for(x = 0; x < 25; x++) {
 		if(isDefined(self.syn["hud"]["arrow"][0][x])) {
 			self.syn["hud"]["arrow"][0][x] destroy();
 			self.syn["hud"]["arrow"][1][x] destroy();
@@ -1709,6 +1709,7 @@ set_colored_classes() { // Retropack
   }
 }
 
-set_stat(value, stat_name) {
+set_stat(value, stat_name, print_name) {
 	self setplayerdata( common_scripts\utility::getstatsgroup_ranked(), stat_name, value);
+	iPrintString("Set " + print_name + " to " + value);
 }
