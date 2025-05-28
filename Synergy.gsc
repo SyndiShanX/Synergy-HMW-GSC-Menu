@@ -949,7 +949,7 @@ menu_index() {
 			
 			self add_increment("Set Prestige", ::set_prestige, 0, 0, 10, 1);
 			
-			if(self.pers["prestige"] == 10) {
+			if(self.pers["prestige"] == 10 || isDefined(self.set_10th_prestige)) {
 				self add_increment("Set Level", ::set_rank, 0, 0, 1000, 10);
 			} else {
 				self add_increment("Set Level", ::set_rank, 0, 0, 70, 1);
@@ -1615,7 +1615,9 @@ set_rank(value) {
 		value--;
 	}
 	
-	if(value > 69) {
+	if(value == 999) {
+		rank_xp = 2516000 + (81300 * (value - 69));
+	} else if(value > 69) {
 		rank_xp = 2516000 + (81300 * (value - 69)) - 81300;
 	} else if(value == 69) {
 		rank_xp = 2434700;
@@ -1629,6 +1631,12 @@ set_rank(value) {
 }
 
 set_prestige(value) {
+	if(value == 10) {
+		self.set_10th_prestige = true;
+	} else {
+		self.set_10th_prestige = undefined;
+	}
+	
 	self maps\mp\gametypes\_persistence::statset("prestige", value);
 	iPrintString(self.name + "'s Prestige set to " + value);
 }
