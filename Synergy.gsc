@@ -151,6 +151,7 @@ fade_hud(alpha, time) {
 	self endon("stop_hud_fade");
 	self fadeOverTime(time);
 	self.alpha = alpha;
+	self.glowalpha = self.glowalpha - (0.2 / (time * 2));
 	wait time;
 }
 
@@ -1194,6 +1195,7 @@ iPrintString(string) {
 	}
 	self.syn["string"] notify("stop_hud_fade");
 	self.syn["string"].alpha = 1;
+	self.syn["string"].glowalpha = 0.2;
 	self.syn["string"] setText(string);
 	self.syn["string"] thread fade_hud(0, 4);
 }
