@@ -1290,7 +1290,8 @@ no_clip_loop() {
 
 	clip = spawn("script_origin", self.origin);
 	self playerLinkTo(clip);
-	if(!isDefined(self.godmode) || !self.godmode) {
+	
+	if(!isDefined(self.god_mode) || !self.god_mode) {
 		god_mode();
 		wait .01;
 		iPrintString("");
@@ -1359,16 +1360,20 @@ super_jump() {
 	self.super_jump = !return_toggle(self.super_jump);
 	if(self.super_jump) {
 		setdvar("jump_height", 999);
-		if(!self.god_mode) {
-			self.jump_god_mode = true;
+		if(!isDefined(self.god_mode) || !self.god_mode) {
 			god_mode();
+			wait .01;
+			iPrintString("");
+			self.jump_god_mode = true;
 		}
 		self iPrintString("Super Jump [^2ON^7]");
 	} else {
 		setdvar("jump_height", 39);
-		if(isDefined(self.jump_god_mode) && self.jump_god_mode) {
-			self.jump_god_mode = undefined;
+		if(self.jump_god_mode) {
 			god_mode();
+			wait .01;
+			iPrintString("");
+			self.jump_god_mode = undefined;
 		}
 		self iPrintString("Super Jump [^1OFF^7]");
 	}
