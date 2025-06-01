@@ -12,7 +12,7 @@ init() {
 }
 
 return_false() {
-  return false;
+	return false;
 }
 
 player_damage_callback(inflictor, attacker, damage, flags, death_reason, weapon, point, direction, hit_location, time_offset) {
@@ -156,16 +156,16 @@ fade_hud(alpha, time) {
 
 hud_scale_over_time(time, width, height) {
 	self endon("stop_hud_scale");
-  self scaleovertime(time, width, height);
-  self.width = width;
-  self.height = height;
-  wait time;
+	self scaleovertime(time, width, height);
+	self.width = width;
+	self.height = height;
+	wait time;
 }
 
 font_scale_over_time(time, scale) {
 	self endon("stop_font_scale");
-  self changefontscaleovertime(time);
-  self.fontscale = scale;
+	self changefontscaleovertime(time);
+	self.fontscale = scale;
 }
 
 create_text(text, font, font_scale, align_x, align_y, x, y, color, alpha, z_index, hide_when_in_menu, archive) {
@@ -331,7 +331,7 @@ add_toggle(text, function, toggle, array, argument_1, argument_2, argument_3) {
 	
 	if(isDefined(array)) {
 		option.slider = true;
-		option.array  = array;
+		option.array = array;
 	}
 	
 	self.structure[self.structure.size] = option;
@@ -507,8 +507,7 @@ initial_monitor() {
 					}
 					
 					wait .75; // Knife Cooldown
-				}
-				else if(self adsButtonPressed() && !self attackButtonPressed() || self attackButtonPressed() && !self adsButtonPressed()) {
+				} else if(self adsButtonPressed() && !self attackButtonPressed() || self attackButtonPressed() && !self adsButtonPressed()) {
 					if(isDefined(self.structure) && self.structure.size >= 2) {
 						if(return_toggle(self.syn["utility"].interaction)) {
 							self playSoundToPlayer("h1_ui_menu_scroll", self);
@@ -520,8 +519,7 @@ initial_monitor() {
 						self update_scrolling(scrolling);
 					}
 					wait .15; // Scroll Cooldown
-				}
-				else if(self fragButtonPressed() && !self secondaryOffhandButtonPressed() || self secondaryOffhandButtonPressed() && !self fragButtonPressed()) {
+				} else if(self fragButtonPressed() && !self secondaryOffhandButtonPressed() || self secondaryOffhandButtonPressed() && !self fragButtonPressed()) {
 					if(return_toggle(self.structure[cursor].slider)) {
 						if(return_toggle(self.syn["utility"].interaction)) {
 							self playSoundToPlayer("h1_ui_menu_scroll", self);
@@ -532,8 +530,7 @@ initial_monitor() {
 						self set_slider(scrolling);
 					}
 					wait .07;
-				}
-				else if(self useButtonPressed()) {
+				} else if(self useButtonPressed()) {
 					if(isDefined(self.structure[cursor].function)) {
 						if(return_toggle(self.syn["utility"].interaction)) {
 							self playSoundToPlayer("mp_ui_decline", self);
@@ -568,8 +565,8 @@ open_menu(menu) {
 	
 	self.syn["hud"]["background"][0] = self create_shader("white", "TOP_LEFT", "CENTER", self.syn["utility"].x_offset - 1, (self.syn["utility"].y_offset - 1), 202, 30, self.syn["utility"].color[5], 1, 1); // Outline
 	self.syn["hud"]["background"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), self.syn["utility"].y_offset, 200, 28, self.syn["utility"].color[1], 1, 2); // Main Background
-	self.syn["hud"]["foreground"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), (self.syn["utility"].y_offset + 14), 194, 14, self.syn["utility"].color[3], 1, 4); // Cursor
-	self.syn["hud"]["foreground"][2] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 195), (self.syn["utility"].y_offset + 14), 4, 14, self.syn["utility"].color[3], 1, 4); // Scrollbar
+	self.syn["hud"]["foreground"][0] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), (self.syn["utility"].y_offset + 14), 194, 14, self.syn["utility"].color[3], 1, 4); // Cursor
+	self.syn["hud"]["foreground"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 195), (self.syn["utility"].y_offset + 14), 4, 14, self.syn["utility"].color[3], 1, 4); // Scrollbar
 	
 	self set_menu(menu);
 	self create_option();
@@ -692,27 +689,26 @@ update_resize() {
 	adjust = (self.structure.size > self.syn["utility"].option_limit) ? int(((94 / self.structure.size) * limit)) : height;
 	position = (self.structure.size - 1) / (height - adjust);
 	if(!return_toggle(self.shader_option[self get_menu()])) {
-		if(!isDefined(self.syn["hud"]["foreground"][1])) {
-			self.syn["hud"]["foreground"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), (self.syn["utility"].y_offset + 14), 194, 14, self.syn["utility"].color[3], 1, 4); // Cursor
+		if(!isDefined(self.syn["hud"]["foreground"][0])) {
+			self.syn["hud"]["foreground"][0] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), (self.syn["utility"].y_offset + 14), 194, 14, self.syn["utility"].color[3], 1, 4); // Cursor
 		}
 		
-		if(!isDefined(self.syn["hud"]["foreground"][2])) {
-			self.syn["hud"]["foreground"][2] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 195), (self.syn["utility"].y_offset + 14), 4, 14, self.syn["utility"].color[3], 1, 4); // Scrollbar
+		if(!isDefined(self.syn["hud"]["foreground"][1])) {
+			self.syn["hud"]["foreground"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 195), (self.syn["utility"].y_offset + 14), 4, 14, self.syn["utility"].color[3], 1, 4); // Scrollbar
 		}
 	}
 	
-	self.syn["hud"]["background"][0] set_shader(self.syn["hud"]["background"][0].shader, self.syn["hud"]["background"][0].width, return_toggle(self.shader_option[self get_menu()]) ? 42 : (height + 16));
-	self.syn["hud"]["background"][1] set_shader(self.syn["hud"]["background"][1].shader, self.syn["hud"]["background"][1].width, return_toggle(self.shader_option[self get_menu()]) ? 40 : (height + 14));
-	self.syn["hud"]["foreground"][0] set_shader(self.syn["hud"]["foreground"][0].shader, self.syn["hud"]["foreground"][0].width, return_toggle(self.shader_option[self get_menu()]) ? 26 : height);
-	self.syn["hud"]["foreground"][2] set_shader(self.syn["hud"]["foreground"][2].shader, self.syn["hud"]["foreground"][2].width, adjust);
+	self.syn["hud"]["background"][0] set_shader("white", self.syn["hud"]["background"][0].width, return_toggle(self.shader_option[self get_menu()]) ? 42 : (height + 16));
+	self.syn["hud"]["background"][1] set_shader("white", self.syn["hud"]["background"][1].width, return_toggle(self.shader_option[self get_menu()]) ? 40 : (height + 14));
+	self.syn["hud"]["foreground"][1] set_shader("white", self.syn["hud"]["foreground"][1].width, adjust);
 	
-	if(isDefined(self.syn["hud"]["foreground"][1])) {
-		self.syn["hud"]["foreground"][1].y = (self.syn["hud"]["text"][self get_cursor()].y - 2);
+	if(isDefined(self.syn["hud"]["foreground"][0])) {
+		self.syn["hud"]["foreground"][0].y = (self.syn["hud"]["text"][self get_cursor()].y - 2);
 	}
 	
-	self.syn["hud"]["foreground"][2].y = (self.syn["utility"].y_offset + 14);
+	self.syn["hud"]["foreground"][1].y = (self.syn["utility"].y_offset + 14);
 	if(self.structure.size > self.syn["utility"].option_limit) {
-	    self.syn["hud"]["foreground"][2].y += (self get_cursor() / position);
+			self.syn["hud"]["foreground"][1].y += (self get_cursor() / position);
 	}
 }
 
@@ -773,12 +769,14 @@ create_rainbow_color() {
 		}
 		
 		x += 3;
-		if(x > 255)
+		if(x > 255) {
 			x = 0;
+		}
 		
 		y += 3;
-		if(y > 1545)
+		if(y > 1545) {
 			y = 0;
+		}
 		
 		level.rainbow_color = (r/255, g/255, b/255);
 		wait .05;
@@ -857,7 +855,7 @@ onPlayerSpawned() {
 			
 			self.syn["controls-hud"] = [];
 			self.syn["controls-hud"]["title"][0] = self create_text("Controls", self.syn["utility"].font, self.syn["utility"].font_scale, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 86), (self.syn["utility"].y_offset + 2), self.syn["utility"].color[4], 1, 10);
-			self.syn["controls-hud"]["title"][1] = self create_text("______                             ______", self.syn["utility"].font, self.syn["utility"].font_scale * 1.5, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 4), (self.syn["utility"].y_offset - 4), self.syn["utility"].color[5], 1, 10);
+			self.syn["controls-hud"]["title"][1] = self create_text("______														 ______", self.syn["utility"].font, self.syn["utility"].font_scale * 1.5, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 4), (self.syn["utility"].y_offset - 4), self.syn["utility"].color[5], 1, 10);
 			
 			self.syn["controls-hud"]["background"][0] = self create_shader("white", "TOP_LEFT", "CENTER", self.syn["utility"].x_offset - 1, (self.syn["utility"].y_offset - 1), 222, 97, self.syn["utility"].color[5], 1, 1);
 			self.syn["controls-hud"]["background"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), self.syn["utility"].y_offset, 220, 95, self.syn["utility"].color[1], 1, 2);
@@ -1261,69 +1259,69 @@ god_mode() {
 }
 
 no_clip() {
-  self endon("disconnect");
-  self endon("game_ended");
+	self endon("disconnect");
+	self endon("game_ended");
 
-  if(!isDefined(self.no_clip)) {
-    self.no_clip = true;
+	if(!isDefined(self.no_clip)) {
+		self.no_clip = true;
 		self iPrintString("No Clip [^2ON^7], Press ^3[{+frag}]^7 to Enter and ^3[{+melee}]^7 to Exit");
-    while (isDefined(self.no_clip)) {
-      if(self fragButtonPressed()) {
-        if(!isDefined(self.no_clip_loop)) {
-          self thread no_clip_loop();
+		while (isDefined(self.no_clip)) {
+			if(self fragButtonPressed()) {
+				if(!isDefined(self.no_clip_loop)) {
+					self thread no_clip_loop();
 				}
-      }
-      wait .05;
-    }
-  } else {
-    self.no_clip = undefined;
+			}
+			wait .05;
+		}
+	} else {
+		self.no_clip = undefined;
 		self iPrintString("No Clip [^1OFF^7]");
 	}
 }
 
 no_clip_loop() {
-  self endon("disconnect");
-  self endon("noclip_end");
-  self disableWeapons();
-  self disableOffHandWeapons();
-  self.no_clip_loop = true;
+	self endon("disconnect");
+	self endon("noclip_end");
+	self disableWeapons();
+	self disableOffHandWeapons();
+	self.no_clip_loop = true;
 
-  clip = spawn("script_origin", self.origin);
-  self playerLinkTo(clip);
-  if(!isDefined(self.godmode) || !self.godmode) {
-    god_mode();
+	clip = spawn("script_origin", self.origin);
+	self playerLinkTo(clip);
+	if(!isDefined(self.godmode) || !self.godmode) {
+		god_mode();
 		wait .01;
 		iPrintString("");
 		self.temp_god_mode = true;
 	}
 
-  while (true) {
-    vec = anglesToForward(self getPlayerAngles());
-    end = (vec[0] * 60, vec[1] * 60, vec[2] * 60);
-    if(self attackButtonPressed()) {
-      clip.origin = clip.origin + end;
+	while (true) {
+		vec = anglesToForward(self getPlayerAngles());
+		end = (vec[0] * 60, vec[1] * 60, vec[2] * 60);
+		if(self attackButtonPressed()) {
+			clip.origin = clip.origin + end;
 		}
-    if(self adsButtonPressed()) {
-      clip.origin = clip.origin - end;
+		if(self adsButtonPressed()) {
+			clip.origin = clip.origin - end;
 		}
-    if(self meleeButtonPressed()) {
-      break;
+		if(self meleeButtonPressed()) {
+			break;
 		}
-    wait .05;
-  }
+		wait .05;
+	}
 
-  clip delete();
-  self enableWeapons();
-  self enableOffhandWeapons();
+	clip delete();
+	self enableWeapons();
+	self enableOffhandWeapons();
 
-  if(self.temp_god_mode) {
-    god_mode();
+	if(self.temp_god_mode) {
+		god_mode();
 		wait .01;
 		iPrintString("");
 		self.temp_god_mode = undefined;
 	}
 
-  self.no_clip_loop = undefined;
+	self.no_clip_loop = undefined;
 }
 
 infinite_ammo() {
@@ -1425,7 +1423,7 @@ give_perk(perk, pro_perk) { // Retropack
 	self maps\mp\_utility::giveperk(perk);
 	self maps\mp\_utility::giveperk(pro_perk);
 	waitframe();
-  maps\mp\perks\_perks::applyperks();
+	maps\mp\perks\_perks::applyperks();
 }
 
 // Weapon Options
@@ -1446,16 +1444,16 @@ check_weapons(weapon) {
 
 give_weapon(weapon) {
 	if(weapon == "specialty_tacticalinsertion") {
-    weapon = "flare_mp";
+		weapon = "flare_mp";
 		self setLethalWeapon(weapon);
 		_giveweapon(weapon);
 		self giveMaxAmmo(weapon);
-  } else if(weapon == "specialty_blastshield") {
-    self maps\mp\_utility::giveperk("specialty_blastshield");
+	} else if(weapon == "specialty_blastshield") {
+		self maps\mp\_utility::giveperk("specialty_blastshield");
 		self setLethalWeapon(weapon);
 		_giveweapon(weapon);
 		self giveMaxAmmo(weapon);
-  } else {
+	} else {
 		_giveweapon(weapon);
 		self switchToWeapon(weapon);
 		wait 1;
@@ -1601,10 +1599,10 @@ update_status(element, text) {
 }
 
 set_challenges() { // Retropack
-  self endon("disconnect");
-  self endon("death");
-  self.god_mode = true;
-  chalProgress = 0;
+	self endon("disconnect");
+	self endon("death");
+	self.god_mode = true;
+	chalProgress = 0;
 	progress_bar = self create_shader("white", "top_left", "center", 0, -100, 1, 10, self.syn["utility"].color[5], 1, 9999);
 	progress_outline = self create_shader("white", "center", "top", 0, -105, 132, 37, self.syn["utility"].color[5], 1, 1);
 	progress_background = self create_shader("white", "center", "top", 0, -105, 130, 35, self.syn["utility"].color[1], 1, 2);
@@ -1613,22 +1611,22 @@ set_challenges() { // Retropack
 	if(self in_menu()) {
 		self close_menu();
 	}
-  foreach(challengeRef, challengeData in level.challengeInfo) {
-    finalTarget = 0;
-    finalTier = 0;
-    for (tierId = 1; isDefined(challengeData["targetval"][tierId]); tierId++) {
-      finalTarget = challengeData["targetval"][tierId];
-      finalTier = tierId + 1;
-    }
-    if(self isItemUnlocked(challengeRef)) {
-      self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
-      self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
-    }
-    chalProgress++;
-    chalPercent = ceil(((chalProgress / level.challengeInfo.size) * 100));
+	foreach(challengeRef, challengeData in level.challengeInfo) {
+		finalTarget = 0;
+		finalTier = 0;
+		for (tierId = 1; isDefined(challengeData["targetval"][tierId]); tierId++) {
+			finalTarget = challengeData["targetval"][tierId];
+			finalTier = tierId + 1;
+		}
+		if(self isItemUnlocked(challengeRef)) {
+			self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
+			self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
+		}
+		chalProgress++;
+		chalPercent = ceil(((chalProgress / level.challengeInfo.size) * 100));
 		progress_bar set_shader("white", int(chalPercent), 10);
-    waitframe();
-  }
+		waitframe();
+	}
 	progress_bar destroyElem();
 	progress_outline destroyElem();
 	progress_background destroyElem();
@@ -1636,7 +1634,7 @@ set_challenges() { // Retropack
 	progress_background = self create_shader("white", "center", "top", 0, -115, 135, 15, self.syn["utility"].color[1], 1, 2);
 	self notify("stop_updating_status");
 	progress_text setText("Unlock All Completed");
-  wait 2;
+	wait 2;
 	progress_outline destroyElem();
 	progress_background destroyElem();
 	progress_text destroyElem();
@@ -1661,7 +1659,7 @@ set_rank(value) {
 	}
 	
 	self maps\mp\gametypes\_rank::giverankxp(undefined, rank_xp, undefined, undefined, false);
-  self maps\mp\gametypes\_persistence::statset("experience", rank_xp);
+	self maps\mp\gametypes\_persistence::statset("experience", rank_xp);
 	iPrintString(self.name + "'s Level set to " + (value + 1));
 }
 
@@ -1677,36 +1675,36 @@ set_prestige(value) {
 }
 
 set_colored_classes() { // Retropack
-  if(!self.coloredClasses) {
-    self.coloredClasses = true;
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 1, "name", "^:Custom Slot 2");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 2, "name", "^:Custom Slot 3");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 3, "name", "^:Custom Slot 4");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 4, "name", "^:Custom Slot 5");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 5, "name", "^:Custom Slot 6");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 6, "name", "^:Custom Slot 7");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 7, "name", "^:Custom Slot 8");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 8, "name", "^:Custom Slot 9");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 9, "name", "^:Custom Slot 10");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 10, "name", "^:Custom Slot 11");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 11, "name", "^:Custom Slot 12");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 12, "name", "^:Custom Slot 13");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 13, "name", "^:Custom Slot 14");
-    self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 14, "name", "^:Custom Slot 15");
-    self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 0, "name", "^:Custom Slot 1");
-    self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 1, "name", "^:Custom Slot 2");
-    self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 2, "name", "^:Custom Slot 3");
-    self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 3, "name", "^:Custom Slot 4");
-    self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 4, "name", "^:Custom Slot 5");
-    progress_outline = self create_shader("white", "center", "top", 0, -115, 137, 17, self.syn["utility"].color[5], 1, 1);
+	if(!self.coloredClasses) {
+		self.coloredClasses = true;
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 1, "name", "^:Custom Slot 2");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 2, "name", "^:Custom Slot 3");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 3, "name", "^:Custom Slot 4");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 4, "name", "^:Custom Slot 5");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 5, "name", "^:Custom Slot 6");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 6, "name", "^:Custom Slot 7");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 7, "name", "^:Custom Slot 8");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 8, "name", "^:Custom Slot 9");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 9, "name", "^:Custom Slot 10");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 10, "name", "^:Custom Slot 11");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 11, "name", "^:Custom Slot 12");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 12, "name", "^:Custom Slot 13");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 13, "name", "^:Custom Slot 14");
+		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 14, "name", "^:Custom Slot 15");
+		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 0, "name", "^:Custom Slot 1");
+		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 1, "name", "^:Custom Slot 2");
+		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 2, "name", "^:Custom Slot 3");
+		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 3, "name", "^:Custom Slot 4");
+		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 4, "name", "^:Custom Slot 5");
+		progress_outline = self create_shader("white", "center", "top", 0, -115, 137, 17, self.syn["utility"].color[5], 1, 1);
 		progress_background = self create_shader("white", "center", "top", 0, -115, 135, 15, self.syn["utility"].color[1], 1, 2);
 		progress_text = self create_text("Colored Classes Set", "default", 1, "center", "top", 0, -115, (1,1,1), 1, 9999, true, true);
 		wait 2;
 		progress_outline destroyElem();
 		progress_background destroyElem();
 		progress_text destroyElem();
-  }
+	}
 }
 
 set_stat(value, stat_name, print_name) {
