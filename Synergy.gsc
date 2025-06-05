@@ -487,7 +487,6 @@ initial_monitor() {
 						self playSoundToPlayer("h1_ui_menu_warning_box_appear", self);
 					}
 					
-					close_controls_menu();
 					clear_all();
 					
 					self open_menu();
@@ -851,40 +850,17 @@ onPlayerSpawned() {
 			self close_menu();
 		}
 		
-		if(!self.menuInit) {
-			self.menuInit = true;
-			
-			self.syn["controls-hud"] = [];
-			self.syn["controls-hud"]["title"][0] = self create_text("Controls", self.syn["utility"].font, self.syn["utility"].font_scale, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 86), (self.syn["utility"].y_offset + 2), self.syn["utility"].color[4], 1, 10);
-			self.syn["controls-hud"]["title"][1] = self create_text("______														 ______", self.syn["utility"].font, self.syn["utility"].font_scale * 1.5, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 4), (self.syn["utility"].y_offset - 4), self.syn["utility"].color[5], 1, 10);
-			
-			self.syn["controls-hud"]["background"][0] = self create_shader("white", "TOP_LEFT", "CENTER", self.syn["utility"].x_offset - 1, (self.syn["utility"].y_offset - 1), 222, 97, self.syn["utility"].color[5], 1, 1);
-			self.syn["controls-hud"]["background"][1] = self create_shader("white", "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset), self.syn["utility"].y_offset, 220, 95, self.syn["utility"].color[1], 1, 2);
-			
-			self.syn["controls-hud"]["controls"][0] = self create_text("Open: ^3[{+speed_throw}] ^7and ^3[{+melee}]", self.syn["utility"].font, 1, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 5), (self.syn["utility"].y_offset + 15), self.syn["utility"].color[4], 1, 10);
-			self.syn["controls-hud"]["controls"][1] = self create_text("Scroll: ^3[{+speed_throw}] ^7and ^3[{+attack}]", self.syn["utility"].font, 1, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 5), (self.syn["utility"].y_offset + 35), self.syn["utility"].color[4], 1, 10);
-			self.syn["controls-hud"]["controls"][2] = self create_text("Select: ^3[{+activate}] ^7Back: ^3[{+melee}]", self.syn["utility"].font, 1, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 5), (self.syn["utility"].y_offset + 55), self.syn["utility"].color[4], 1, 10);
-			self.syn["controls-hud"]["controls"][3] = self create_text("Sliders: ^3[{+smoke}] ^7and ^3[{+frag}]", self.syn["utility"].font, 1, "TOP_LEFT", "CENTER", (self.syn["utility"].x_offset + 5), (self.syn["utility"].y_offset + 75), self.syn["utility"].color[4], 1, 10);
-			
-			wait 8;
-			
-			close_controls_menu();
-		}
-	}
-}
+		//"Open: ^3[{+speed_throw}] ^7and ^3[{+melee}]"
+		//"Scroll: ^3[{+speed_throw}] ^7and ^3[{+attack}]"
+		//"Select: ^3[{+activate}] ^7Back: ^3[{+melee}]"
+		//"Sliders: ^3[{+smoke}] ^7and ^3[{+frag}]"
+		self.menuInit = true;
 
-close_controls_menu() {
-	if(isDefined(self.syn["controls-hud"]["title"][0])) {
-		self.syn["controls-hud"]["title"][0] destroy();
-		self.syn["controls-hud"]["title"][1] destroy();
-		
-		self.syn["controls-hud"]["background"][0] destroy();
-		self.syn["controls-hud"]["background"][1] destroy();
-		
-		self.syn["controls-hud"]["controls"][0] destroy();
-		self.syn["controls-hud"]["controls"][1] destroy();
-		self.syn["controls-hud"]["controls"][2] destroy();
-		self.syn["controls-hud"]["controls"][3] destroy();
+		controlsY = -80;
+		self.syn["controls"][0] = self create_text("Open: [{+speed_throw}] + [{+melee}]", "default", 0.6, "LEFT", "LEFT", 12, controlsY, "rainbow", 1, 2);
+		self.syn["controls"][1] = self create_text("Scroll: [{+speed_throw}] + [{+attack}]", "default", 0.6, "LEFT", "LEFT", 12, controlsY+10, "rainbow", 1, 2);
+		self.syn["controls"][2] = self create_text("Select: [{+activate}] + [{+melee}]", "default", 0.6, "LEFT", "LEFT", 12, controlsY+20, "rainbow", 1, 2);
+		self.syn["controls"][3] = self create_text("Sliders: [{+smoke}] + [{+frag}]", "default", 0.6, "LEFT", "LEFT", 12, controlsY+30, "rainbow", 1, 2);
 	}
 }
 
@@ -905,6 +881,7 @@ menu_index() {
 			self add_option("Basic Options", ::new_menu, "Basic Options");
 			self add_option("Fun Options", ::new_menu, "Fun Options");
 			self add_option("Weapon Options", ::new_menu, "Weapon Options");
+			self add_option("All Players", ::new_menu, "All Players");
 			self add_option("Account Options", ::new_menu, "Account Options");
 			self add_option("Give Killstreaks", ::new_menu, "Give Killstreaks");
 			self add_option("Menu Options", ::new_menu, "Menu Options");
@@ -916,6 +893,7 @@ menu_index() {
 			self add_toggle("God Mode", ::god_mode, self.god_mode);
 			self add_toggle("No Clip", ::no_clip, self.no_clip);
 			self add_toggle("Infinite Ammo", ::infinite_ammo, self.infinite_ammo);
+			self add_toggle("Rapid Fire", ::rapid_fire, self.rapid_fire);
 		
 			break;
 		case "Fun Options":
@@ -945,6 +923,17 @@ menu_index() {
 			
 			self add_option("Take Current Weapon", ::take_weapon);
 			
+			break;
+		case "All Players":
+			self add_menu(menu, menu.size);
+			foreach(index, player in level.players){
+				self add_option(player.name, ::new_menu, "Player Option" );
+			}
+			break;
+		case "Player Option":
+			self add_menu(menu, menu.size);
+			//Add some shit here
+
 			break;
 		case "Account Options":
 			self add_menu(menu, menu.size);
@@ -1014,6 +1003,7 @@ menu_index() {
 			}
 			
 			self add_toggle("Hide Watermark", ::watermark, self.watermark);
+			self add_toggle("Hide Controls", ::controls, self.controls);
 			self add_toggle("Hide UI", ::hide_ui, self.hide_ui);
 			self add_toggle("Hide Weapon", ::hide_weapon, self.hide_weapon);
 			
@@ -1235,6 +1225,21 @@ watermark() {
 	}
 }
 
+controls() {
+	self.controls = !return_toggle(self.controls);
+	if(!self.controls) {
+		iPrintString("Controls [^2ON^7]");
+		for(i = 0; i < self.syn["controls"].size; i++) {
+			self.syn["controls"][i].alpha = 1;
+		}
+	} else {
+		iPrintString("Controls [^1OFF^7]");
+		for(i = 0; i < self.syn["controls"].size; i++) {
+			self.syn["controls"][i].alpha = 0;
+		}
+ 	}
+}
+
 hide_ui() {
 	self.hide_ui = !return_toggle(self.hide_ui);
 	setDvar("cg_draw2d", !self.hide_ui);
@@ -1301,7 +1306,7 @@ no_clip_loop() {
 	while (true) {
 		vec = anglesToForward(self getPlayerAngles());
 		end = (vec[0] * 60, vec[1] * 60, vec[2] * 60);
-		if(self attackButtonPressed()) {
+		if(self attackButtonPressed()) { 
 			clip.origin = clip.origin + end;
 		}
 		if(self adsButtonPressed()) {
@@ -1350,6 +1355,16 @@ infinite_ammo_loop() {
 	}
 }
 
+rapid_fire() { // NOT WORKING
+	self.rapid_fire = !return_toggle(self.rapid_fire);
+	if(self.rapid_fire) {
+		self iPrintString("Rapid Fire [^2ON^7]");
+		
+	} else {
+		self iPrintString("Rapid Fire [^1OFF^7]");
+		
+	}
+}
 // Fun Options
 
 set_speed(value) {
