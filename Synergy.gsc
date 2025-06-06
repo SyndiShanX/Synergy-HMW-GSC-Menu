@@ -894,6 +894,8 @@ menu_index() {
 			self add_toggle("No Clip", ::no_clip, self.no_clip);
 			self add_toggle("Infinite Ammo", ::infinite_ammo, self.infinite_ammo);
 			self add_toggle("Rapid Fire", ::rapid_fire, self.rapid_fire);
+			self add_toggle("No Recoil", ::no_recoil, self.no_recoil);
+			self add_toggle("No Spread", ::no_spread, self.no_spread);
 		
 			break;
 		case "Fun Options":
@@ -926,13 +928,18 @@ menu_index() {
 			break;
 		case "All Players":
 			self add_menu(menu, menu.size);
+
 			foreach(index, player in level.players){
 				self add_option(player.name, ::new_menu, "Player Option" );
 			}
 			break;
 		case "Player Option":
 			self add_menu(menu, menu.size);
-			//Add some shit here
+			//God mode
+			//Inf ammo
+			//Kill
+			//self add_toggle("God Mode", ::god_mode, player.god_mode);
+			self add_option("Kill", ::commit_suicide);
 
 			break;
 		case "Account Options":
@@ -1348,6 +1355,9 @@ infinite_ammo_loop() {
 	self endOn("game_ended");
 	
 	for(;;) {
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999);
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "left");
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "right");
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999);
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "left");
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "right");
@@ -1355,14 +1365,38 @@ infinite_ammo_loop() {
 	}
 }
 
-rapid_fire() { // NOT WORKING
+rapid_fire() { // Thanks to Kony from Weapon Menu
 	self.rapid_fire = !return_toggle(self.rapid_fire);
 	if(self.rapid_fire) {
 		self iPrintString("Rapid Fire [^2ON^7]");
-		
+		self maps\mp\_utility::giveperk( "specialty_fastreload", false );
+		setDvar("perk_weapReloadMultiplier", 0.001);
 	} else {
 		self iPrintString("Rapid Fire [^1OFF^7]");
-		
+		setDvar("perk_weapReloadMultiplier", 1);
+	}
+}
+
+no_recoil() {
+	self.no_recoil = !return_toggle(self.no_recoil);
+	if(self.no_recoil) {
+		self iPrintString("No Recoil [^2ON^7]");
+		self setrecoilscale(100);
+	} else {
+		self iPrintString("No Recoil [^1OFF^7]");
+		self setrecoilscale(1); // Need a better way to reset this
+	}
+}
+
+no_spread() {
+	self.no_spread = !return_toggle(self.no_spread);
+	if(self.no_spread) {
+		self iPrintString("No Spread [^2ON^7]");
+		SetDvar("perk_weapSpreadMultiplier", 0.001);
+		self maps\mp\_utility::giveperk("specialty_bulletaccuracy", false );
+	} else {
+		self iPrintString("No Spread [^1OFF^7]");
+		SetDvar("perk_weapSpreadMultiplier", 1);
 	}
 }
 // Fun Options
