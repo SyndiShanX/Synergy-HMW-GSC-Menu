@@ -471,6 +471,7 @@ initial_variable() {
 	
 	self.cursor = [];
 	self.previous = [];
+	self.previous_option = undefined;
 	
 	self set_menu("Synergy");
 	self set_title(self get_menu());
@@ -532,6 +533,10 @@ initial_monitor() {
 					wait .07;
 				} else if(self useButtonPressed()) {
 					if(isDefined(self.structure[cursor].function)) {
+						if(self.structure[cursor].function == ::new_menu) {
+							self.previous_option = self.structure[cursor].text;
+						}
+
 						if(return_toggle(self.syn["utility"].interaction)) {
 							self playSoundToPlayer("mp_ui_decline", self);
 						}
@@ -850,10 +855,6 @@ onPlayerSpawned() {
 			self close_menu();
 		}
 		
-		//"Open: ^3[{+speed_throw}] ^7and ^3[{+melee}]"
-		//"Scroll: ^3[{+speed_throw}] ^7and ^3[{+attack}]"
-		//"Select: ^3[{+activate}] ^7Back: ^3[{+melee}]"
-		//"Sliders: ^3[{+smoke}] ^7and ^3[{+frag}]"
 		self.menuInit = true;
 
 		controlsY = -80;
@@ -908,7 +909,7 @@ menu_index() {
 			self add_toggle("Third Person", ::third_person, self.third_person);
 			self add_option("Visions", ::new_menu, "Visions");
 			
-			self add_option("Suicide", ::commit_suicide);
+			self add_option("Suicide", ::commit_suicide, self);
 			self add_option("End Game", ::end_game);
 			
 			break;
@@ -929,17 +930,28 @@ menu_index() {
 		case "All Players":
 			self add_menu(menu, menu.size);
 
-			foreach(index, player in level.players){
-				self add_option(player.name, ::new_menu, "Player Option" );
+			foreach(i, player in level.players){
+				self add_option(player.name, ::new_menu, "Player Option", player);
 			}
 			break;
 		case "Player Option":
 			self add_menu(menu, menu.size);
-			//God mode
-			//Inf ammo
-			//Kill
-			//self add_toggle("God Mode", ::god_mode, player.god_mode);
-			self add_option("Kill", ::commit_suicide);
+
+			target = undefined;
+			foreach(i, player in level.players) {
+                if(player.name == self.previous_option) {
+                    target = player;
+                    break;
+                }
+            }
+			//Need to add more options here
+
+			if(isDefined(target)) {
+				self add_option("Kill", ::commit_suicide, target);
+				self add_option("Print", ::iPrintString, target);
+			} else {
+				self add_option("Player not found");
+			}
 
 			break;
 		case "Account Options":
@@ -957,7 +969,7 @@ menu_index() {
 				self add_increment("Set Level", ::set_rank, 0, 0, 70, 1);
 			}
 			
-			self add_option("Unlock All", ::set_challenges);
+			self add_option("Unlock All", ::set_challenges, self);
 			
 			self add_option("Set Stats", ::new_menu, "Set Stats");
 			
@@ -1428,8 +1440,8 @@ super_jump() {
 	}
 }
 
-commit_suicide() {
-	maps\mp\_utility::_suicide();
+commit_suicide(player) {
+	player maps\mp\_utility::_suicide();
 }
 
 end_game() {
@@ -1654,10 +1666,10 @@ update_status(element, text) {
 	}
 }
 
-set_challenges() { // Retropack
+set_challenges(target) { // Retropack
 	self endon("disconnect");
 	self endon("death");
-	self.god_mode = true;
+	self.god_mode = true; //Fix this shit
 	chalProgress = 0;
 	progress_bar = self create_shader("white", "top_left", "center", 0, -100, 1, 10, self.syn["utility"].color[5], 1, 9999);
 	progress_outline = self create_shader("white", "center", "top", 0, -105, 132, 37, self.syn["utility"].color[5], 1, 1);
@@ -1674,9 +1686,9 @@ set_challenges() { // Retropack
 			finalTarget = challengeData["targetval"][tierId];
 			finalTier = tierId + 1;
 		}
-		if(self isItemUnlocked(challengeRef)) {
-			self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
-			self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
+		if(target isItemUnlocked(challengeRef)) {
+			target setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
+			target setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
 		}
 		chalProgress++;
 		chalPercent = ceil(((chalProgress / level.challengeInfo.size) * 100));
