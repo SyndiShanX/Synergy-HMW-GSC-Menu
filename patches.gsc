@@ -36,7 +36,7 @@ should_use_old_lightgrids() {
 
 init() {
 	setdvar("r_lightgridnoncompressed", should_use_old_lightgrids());
-	thread scripts\mp\Synergy::init();
+	self thread scripts\mp\Synergy::init();
 }
 
 init_stub() {
