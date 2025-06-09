@@ -224,11 +224,21 @@ event_system() {
 					self initial_variable();
 					self thread initial_observer();
 					
-					controlsY = -80;
-					self.syn["controls"][0] = self create_text("Open: [{+speed_throw}] + [{+melee}]", self.font, 0.6, "LEFT", "LEFT", 12, controlsY, "rainbow", 1, 2);
-					self.syn["controls"][1] = self create_text("Scroll: [{+speed_throw}] + [{+attack}]", self.font, 0.6, "LEFT", "LEFT", 12, controlsY+10, "rainbow", 1, 2);
-					self.syn["controls"][2] = self create_text("Select: [{+activate}] + [{+melee}]", self.font, 0.6, "LEFT", "LEFT", 12, controlsY+20, "rainbow", 1, 2);
-					self.syn["controls"][3] = self create_text("Sliders: [{+smoke}] + [{+frag}]", self.font, 0.6, "LEFT", "LEFT", 12, controlsY+30, "rainbow", 1, 2);
+					self.controls["title"] = self create_text("Controls", self.font, self.font_scale, "TOP_LEFT", "TOPCENTER", (self.x_offset + 99), (self.y_offset + 4), self.color_theme, 1, 10);
+					self.controls["separator"][0] = self create_shader("white", "TOP_LEFT", "TOPCENTER", 181, (self.y_offset + 7.5), 37, 1, self.color_theme, 1, 10);
+					self.controls["separator"][1] = self create_shader("white", "TOP_RIGHT", "TOPCENTER", 399, (self.y_offset + 7.5), 37, 1, self.color_theme, 1, 10);
+					self.controls["border"] = self create_shader("white", "TOP_LEFT", "TOPCENTER", self.x_offset, (self.y_offset - 1), (self.width + 250), 97, self.color_theme, 1, 1);
+					self.controls["background"] = self create_shader("white", "TOP_LEFT", "TOPCENTER", (self.x_offset + 1), self.y_offset, (self.width + 248), 95, (0.075, 0.075, 0.075), 1, 2);
+					self.controls["foreground"] = self create_shader("white", "TOP_LEFT", "TOPCENTER", (self.x_offset + 1), (self.y_offset + 16), (self.width + 248), 79, (0.1, 0.1, 0.1), 1, 3);
+					
+					self.controls["text"][0] = self create_text("Open: ^3[{+speed_throw}] ^7and ^3[{+melee}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 20), (0.75, 0.75, 0.75), 1, 10);
+					self.controls["text"][1] = self create_text("Scroll: ^3[{+speed_throw}] ^7and ^3[{+attack}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 40), (0.75, 0.75, 0.75), 1, 10);
+					self.controls["text"][2] = self create_text("Select: ^3[{+activate}] ^7Back: ^3[{+melee}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 60), (0.75, 0.75, 0.75), 1, 10);
+					self.controls["text"][3] = self create_text("Sliders: ^3[{+smoke}] ^7and ^3[{+frag}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 80), (0.75, 0.75, 0.75), 1, 10);
+					
+					wait 8;
+					
+					close_controls_menu();
 				}
 				break;
 			default:
@@ -1112,36 +1122,6 @@ menu_option() {
 			
 			self add_increment("Score", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "score", "Score");
 			
-			break;
-		case "Give Killstreaks":
-			self add_menu(menu, menu.size);
-			
-			for(i = 0; i < self.syn["killstreaks"][1].size; i++) {
-				self add_option(self.syn["killstreaks"][1][i], undefined, ::give_killstreak, self.syn["killstreaks"][0][i]);
-			}
-			
-			break;
-		case "Menu Options":
-			self add_menu(menu, menu.size);
-			
-			self add_increment("Move Menu X", "Move the Menu around Horizontally", ::modify_menu_position, 0, -600, 20, 10, "x");
-			self add_increment("Move Menu Y", "Move the Menu around Vertically", ::modify_menu_position, 0, -150, 30, 10, "y");
-			
-			self add_option("Rainbow Menu", "Set the Menu Outline Color to Cycling Rainbow", ::set_menu_rainbow);
-			
-			self add_increment("Red", "Set the Red Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Red");
-			self add_increment("Green", "Set the Green Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Green");
-			self add_increment("Blue", "Set the Blue Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Blue");
-			
-			self add_toggle("Watermark", "Enable/Disable Watermark in the Top Left Corner", ::watermark, self.watermark);
-			self add_toggle("Hide Controls", undefined, ::controls, self.controls);
-			self add_toggle("Hide UI", undefined, ::hide_ui, self.hide_ui);
-			self add_toggle("Hide Weapon", undefined, ::hide_weapon, self.hide_weapon);
-			
-			break;
-		case "Visions":
-			self add_menu(menu, menu.size);
-			
 			for(i = 0; i < self.syn["visions"][0].size; i++) {
 				self add_option(self.syn["visions"][0][i], undefined, ::set_vision, self.syn["visions"][1][i]);
 			}
@@ -1150,8 +1130,8 @@ menu_option() {
 		case "Give Weapons":
 			self add_menu(menu, menu.size);
 			
-			for(i = 0; i < self.syn["weapons"]["category"][1].size; i++) {
-				self add_option(self.syn["weapons"]["category"][1][i], undefined, ::new_menu, self.syn["weapons"]["category"][1][i]);
+			for(i = 0; i < self.syn["killstreaks"][1].size; i++) {
+				self add_option(self.syn["killstreaks"][1][i], undefined, ::give_killstreak, self.syn["killstreaks"][0][i]);
 			}
 			
 			break;
@@ -1345,6 +1325,22 @@ return_toggle(variable) {
 	return isDefined(variable) && variable;
 }
 
+close_controls_menu() {
+	if(isDefined(self.controls["title"])) {
+		self.controls["title"] destroy();
+		self.controls["separator"][0] destroy();
+		self.controls["separator"][1] destroy();
+		self.controls["border"] destroy();
+		self.controls["background"] destroy();
+		self.controls["foreground"] destroy();
+		
+		self.controls["text"][0] destroy();
+		self.controls["text"][1] destroy();
+		self.controls["text"][2] destroy();
+		self.controls["text"][3] destroy();
+	}
+}
+
 iPrintString(string) {
 	if(!isDefined(self.syn["string"])) {
 		self.syn["string"] = self create_text(string, "default", 1, "center", "top", 0, -100, (1,1,1), 1, 9999, false);
@@ -1444,7 +1440,7 @@ watermark() {
 	if(self.watermark) {
 		iPrintString("Watermark [^2ON^7]");
 		if(!isDefined(self.syn["watermark"])) {
-			self.syn["watermark"] = self create_text("SyndiShanX", self.font, 1, "left", "top", 370, -215, "rainbow", 1, 3);
+			self.syn["watermark"] = self create_text("SyndiShanX", self.font, 1, "TOP_LEFT", "TOPCENTER", 350, -25, "rainbow", 1, 3);
 		}
 	} else {
 		iPrintString("Watermark [^1OFF^7]");
