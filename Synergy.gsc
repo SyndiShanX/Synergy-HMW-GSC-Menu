@@ -49,6 +49,7 @@ initial_variable() {
 	self.menu_color_green = 255;
 	self.menu_color_blue = 255;
 	self.color_theme = "rainbow";
+	self.stat_increment = 100;
 	
 	self.syn["visions"][0] = ["None", "AC-130", "AC-130 inverted", "Black & White", "Endgame", "Night", "Night Vision", "MP Intro", "MP Nuke Aftermath", "Sepia"];
 	self.syn["visions"][1] = ["", "ac130", "ac130_inverted", "missilecam", "end_game", "default_night", "default_night_mp", "mpintro", "mpnuke_aftermath", "sepia"];
@@ -105,9 +106,8 @@ initial_variable() {
 	// Killstreaks
 	self.syn["killstreaks"][0] = ["radar_mp", "airdrop_marker_mp", "counter_radar_mp", "predator_mp", "sentry_mp", "airstrike_mp", "harrier_airstrike_mp", "helicopter_mp", "airdrop_mega_marker_mp", "advanced_uav_mp", "pavelow_mp", "stealth_airstrike_mp", "ah6_mp", "reaper_mp", "ac130_mp", "chopper_gunner_mp", "emp_mp", "nuke_mp"];
 	self.syn["killstreaks"][1] = ["UAV", "Care Package", "Counter-UAV", "Predator Missile", "Sentry Gun", "Precision Airstrike", "Harrier", "Attack Helicopter", "Emergency Airdrop", "Advanced UAV", "Pavelow", "Stealth Bomber", "AH6 Overwatch", "Reaper", "AC130", "Chopper Gunner", "EMP", "Tactical Nuke"];
-	
+	// Bullets
 	self.syn["bullets"] = ["ac130_105mm_mp", "ac130_40mm_mp", "ac130_25mm_mp", "harrier_20mm_mp", "remotemissile_projectile_mp", "cobra_20mm_mp", "artillery_mp"];
-	self.stat_increment = 100;
 	
 	if(self.pers["prestige"] == 10) {
 		self.set_10th_prestige = true;
@@ -124,6 +124,7 @@ initial_observer() {
 					self playSoundToPlayer("h1_ui_menu_warning_box_appear", self);
 				}
 
+				close_controls_menu();
 				self open_menu();
 				
 				while(self adsButtonPressed() && self meleeButtonPressed()) {
@@ -175,12 +176,12 @@ initial_observer() {
 				wait (0.05 * self.scrolling_buffer);
 			} else if(self useButtonPressed()) {
 				if(isDefined(self.structure[cursor]) && isDefined(self.structure[cursor].function)) {
-					if(self.structure[cursor].function == ::new_menu) {
-						self.previous_option = self.structure[cursor].text;
-					}
-
 					if(self.interaction_enabled) {
 						self playSoundToPlayer("mp_ui_decline", self);
+					}
+					
+					if(self.structure[cursor].function == ::new_menu) {
+						self.previous_option = self.structure[cursor].text;
 					}
 
 					if(isDefined(self.structure[cursor].array) || isDefined(self.structure[cursor].increment)) {
@@ -207,7 +208,7 @@ event_system() {
 	level endon("game_ended");
 	self endon("disconnect");
 	for (;;) {
-		event_name = self common_scripts\utility::waittill_any_return("spawned_player", "player_downed", "death", "joined_spectators");
+		event_name = self waittill_any_return("spawned_player", "player_downed", "death", "joined_spectators");
 		switch (event_name) {
 			case "spawned_player":
 				self.spawn_origin = self.origin;
@@ -219,7 +220,7 @@ event_system() {
 						self freezeControls(false);
 					}
 					
-					setDvar("xblive_privatematch", 0);
+					setdvar("xblive_privatematch", 0);
 		
 					self initial_variable();
 					self thread initial_observer();
@@ -1007,10 +1008,10 @@ menu_option() {
 			self add_option("Basic Options", undefined, ::new_menu, "Basic Options");
 			self add_option("Fun Options", undefined, ::new_menu, "Fun Options");
 			self add_option("Weapon Options", undefined, ::new_menu, "Weapon Options");
-			self add_option("All Players", undefined, ::new_menu, "All Players");
-			self add_option("Account Options", undefined, ::new_menu, "Account Options");
 			self add_option("Give Killstreaks", undefined, ::new_menu, "Give Killstreaks");
+			self add_option("Account Options", undefined, ::new_menu, "Account Options");
 			self add_option("Menu Options", undefined, ::new_menu, "Menu Options");
+			self add_option("All Players", undefined, ::new_menu, "All Players");
 			
 			break;
 		case "Basic Options":
@@ -1019,9 +1020,10 @@ menu_option() {
 			self add_toggle("God Mode", "Makes you Invincible", ::god_mode, self.god_mode);
 			self add_toggle("Frag No Clip", "Fly through the Map using (^3[{+frag}]^7)", ::frag_no_clip, self.frag_no_clip);
 			self add_toggle("Infinite Ammo", "Gives you Infinite Ammo and Infinite Grenades", ::infinite_ammo, self.infinite_ammo);
-			self add_toggle("Rapid Fire", "Lets you shoot very fast (hold ^3[{+reload}]^7 & ^3[{+attack}])", ::rapid_fire, self.rapid_fire);
-			self add_toggle("No Recoil", "No gun recoil when aiming and shooting", ::no_recoil, self.no_recoil);
-			self add_toggle("No Spread", "No bullet spread when hipfiring", ::no_spread, self.no_spread);
+			
+			self add_toggle("Rapid Fire", "Shoot Very Fast (Hold ^3[{+reload}]^7 & ^3[{+attack}])", ::rapid_fire, self.rapid_fire);
+			self add_toggle("No Recoil", "No Recoil while ADS & Firing", ::no_recoil, self.no_recoil);
+			self add_toggle("No Spread", "No Bullet Spread while Hip-firing", ::no_spread, self.no_spread);
 			
 			break;
 		case "Fun Options":
@@ -1053,37 +1055,17 @@ menu_option() {
 			}
 			
 			self add_option("Take Current Weapon", undefined, ::take_weapon);
-
+			
 			self add_option("Bullet Magic", undefined, ::new_menu, "Bullet Magic");
 			
 			break;
-		case "All Players":
+		case "Give Killstreaks":
 			self add_menu(menu, menu.size);
-
-			foreach(i, player in level.players){
-				self add_option(player.name, undefined, ::new_menu, "Player Option", player);
+			
+			for(i = 0; i < self.syn["killstreaks"][1].size; i++) {
+				self add_option(self.syn["killstreaks"][1][i], undefined, ::give_killstreak, self.syn["killstreaks"][0][i]);
 			}
-			break;
-		case "Player Option":
-			self add_menu(menu, menu.size);
-
-			target = undefined;
-			foreach(i, player in level.players) {
-                if(player.name == self.previous_option) {
-                    target = player;
-                    break;
-                }
-            }
-			//Need to add more options here
-
-			if(isDefined(target)) {
-				self add_option("Kill", undefined, ::commit_suicide, target);
-
-				self add_option("Print", undefined, ::iPrintString, target); //Please to god leave this, this is for debugging at each update that will most likely fuck up the target
-			} else {
-				self add_option("Player not found");
-			}
-
+			
 			break;
 		case "Account Options":
 			self add_menu(menu, menu.size);
@@ -1091,6 +1073,7 @@ menu_option() {
 			//self.syn["utility"].option_limit = 10;
 			
 			self add_option("Rainbow Classes", "Set Rainbow Class Names", ::set_colored_classes);
+			
 			self add_increment("Set Prestige", undefined, ::set_prestige, 0, 0, 10, 1);
 			
 			if(isDefined(self.set_10th_prestige)) {
@@ -1100,8 +1083,70 @@ menu_option() {
 			}
 			
 			self add_option("Unlock All", undefined, ::set_challenges);
+			
 			self add_option("Set Stats", undefined, ::new_menu, "Set Stats");
 			
+			break;
+		case "Menu Options":
+			self add_menu(menu, menu.size);
+			
+			self add_increment("Move Menu X", "Move the Menu around Horizontally", ::modify_menu_position, 0, -600, 20, 10, "x");
+			self add_increment("Move Menu Y", "Move the Menu around Vertically", ::modify_menu_position, 0, -150, 30, 10, "y");
+			
+			self add_option("Rainbow Menu", "Set the Menu Outline Color to Cycling Rainbow", ::set_menu_rainbow);
+			
+			self add_increment("Red", "Set the Red Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Red");
+			self add_increment("Green", "Set the Green Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Green");
+			self add_increment("Blue", "Set the Blue Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Blue");
+			
+			self add_toggle("Watermark", "Enable/Disable Watermark in the Top Left Corner", ::watermark, self.watermark);
+			self add_toggle("Hide UI", undefined, ::hide_ui, self.hide_ui);
+			self add_toggle("Hide Weapon", undefined, ::hide_weapon, self.hide_weapon);
+			
+			break;
+		case "All Players":
+			self add_menu(menu, menu.size);
+
+			foreach(player in level.players){
+				self add_option(player.name, undefined, ::new_menu, "Player Option", player);
+			}
+			
+			break;
+		case "Player Option":
+			self add_menu(menu, menu.size);
+
+			target = undefined;
+			foreach(player in level.players) {
+				if(player.name == self.previous_option) {
+					target = player;
+					break;
+				}
+			}
+
+			if(isDefined(target)) {
+				self add_option("Kill", undefined, ::commit_suicide, target);
+				self add_option("Print", undefined, ::iPrintString, target);
+			} else {
+				self add_option("Player not found");
+			}
+			
+			break;
+		case "Bullet Magic":
+			self add_menu(menu, menu.size);
+			
+			for(i = 0; i < self.syn["bullets"].size; i++) {
+				bullet = self.syn["bullets"][i];
+				self add_toggle(bullet, undefined, ::modify_bullet, self.bullet[i], bullet, i);
+			}
+			
+			break;
+		case "Visions":
+			self add_menu(menu, menu.size);
+			
+			for(i = 0; i < self.syn["visions"][0].size; i++) {
+				self add_option(self.syn["visions"][0][i], undefined, ::set_vision, self.syn["visions"][1][i]);
+			}
+
 			break;
 		case "Set Stats":
 			self add_menu(menu, menu.size);
@@ -1122,16 +1167,12 @@ menu_option() {
 			
 			self add_increment("Score", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "score", "Score");
 			
-			for(i = 0; i < self.syn["visions"][0].size; i++) {
-				self add_option(self.syn["visions"][0][i], undefined, ::set_vision, self.syn["visions"][1][i]);
-			}
-
 			break;
 		case "Give Weapons":
 			self add_menu(menu, menu.size);
 			
-			for(i = 0; i < self.syn["killstreaks"][1].size; i++) {
-				self add_option(self.syn["killstreaks"][1][i], undefined, ::give_killstreak, self.syn["killstreaks"][0][i]);
+			for(i = 0; i < self.syn["weapons"]["category"][1].size; i++) {
+				self add_option(self.syn["weapons"]["category"][1][i], undefined, ::new_menu, self.syn["weapons"]["category"][1][i]);
 			}
 			
 			break;
@@ -1277,14 +1318,6 @@ menu_option() {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_weapon, self.syn["weapons"][category][0][i]);
 			}
 			
-			break;
-		case "Bullet Magic":
-			self add_menu(menu, menu.size);
-			
-			for(i = 0; i < self.syn["bullets"].size; i++) {
-				bullet = self.syn["bullets"][i];
-				self add_toggle(bullet, undefined, ::Toggle_modify_bullet, self.bullet[i], bullet, i);
-			}
 			break;
 		default:
 			if(!isDefined(self.selected_player)) {
@@ -1448,29 +1481,14 @@ watermark() {
 	}
 }
 
-controls() {
-	self.controls = !return_toggle(self.controls);
-	if(!self.controls) {
-		iPrintString("Controls [^2ON^7]");
-		for(i = 0; i < self.syn["controls"].size; i++) {
-			self.syn["controls"][i].alpha = 1;
-		}
-	} else {
-		iPrintString("Controls [^1OFF^7]");
-		for(i = 0; i < self.syn["controls"].size; i++) {
-			self.syn["controls"][i].alpha = 0;
-		}
- 	}
-}
-
 hide_ui() {
 	self.hide_ui = !return_toggle(self.hide_ui);
-	setDvar("cg_draw2d", !self.hide_ui);
+	setdvar("cg_draw2d", !self.hide_ui);
 }
 
 hide_weapon() {
 	self.hide_weapon = !return_toggle(self.hide_weapon);
-	setDvar("cg_drawgun", !self.hide_weapon);
+	setdvar("cg_drawgun", !self.hide_weapon);
 }
 
 // Basic Options
@@ -1568,25 +1586,27 @@ infinite_ammo_loop() {
 	self endOn("game_ended");
 	
 	for(;;) {
-		self setWeaponAmmoStock(self getCurrentWeapon(), 999);
-		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "left");
-		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "right");
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999);
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "left");
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "right");
+		
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999);
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "left");
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "right");
+		
 		wait .2;
 	}
 }
 
-rapid_fire() { // Thanks to Kony from Weapon Menu
+rapid_fire() { // Kony's Weapon Menu
 	self.rapid_fire = !return_toggle(self.rapid_fire);
 	if(self.rapid_fire) {
 		self iPrintString("Rapid Fire [^2ON^7]");
-		self maps\mp\_utility::giveperk( "specialty_fastreload", false );
-		setDvar("perk_weapReloadMultiplier", 0.001);
+		self maps\mp\_utility::giveperk( "specialty_fastreload", false);
+		setdvar("perk_weapReloadMultiplier", 0.001);
 	} else {
 		self iPrintString("Rapid Fire [^1OFF^7]");
-		setDvar("perk_weapReloadMultiplier", 1);
+		setdvar("perk_weapReloadMultiplier", 1);
 	}
 }
 
@@ -1594,10 +1614,10 @@ no_recoil() {
 	self.no_recoil = !return_toggle(self.no_recoil);
 	if(self.no_recoil) {
 		self iPrintString("No Recoil [^2ON^7]");
-		self setrecoilscale(100);
+		self setRecoilScale(100);
 	} else {
 		self iPrintString("No Recoil [^1OFF^7]");
-		self setrecoilscale(1); // Need a better way to reset this
+		self setRecoilScale(1);
 	}
 }
 
@@ -1605,11 +1625,11 @@ no_spread() {
 	self.no_spread = !return_toggle(self.no_spread);
 	if(self.no_spread) {
 		self iPrintString("No Spread [^2ON^7]");
-		SetDvar("perk_weapSpreadMultiplier", 0.001);
-		self maps\mp\_utility::giveperk("specialty_bulletaccuracy", false );
+		setdvar("perk_weapSpreadMultiplier", 0.001);
+		self maps\mp\_utility::giveperk("specialty_bulletaccuracy", false);
 	} else {
 		self iPrintString("No Spread [^1OFF^7]");
-		SetDvar("perk_weapSpreadMultiplier", 1);
+		setdvar("perk_weapSpreadMultiplier", 1);
 	}
 }
 
@@ -1644,7 +1664,7 @@ set_speed(value) {
 }
 
 set_timescale(value) {
-	setDvar("timescale", value);
+	setdvar("timescale", value);
 }
 
 super_jump() {
@@ -1676,12 +1696,12 @@ set_vision(vision) {
 	self visionSetNakedForPlayer(vision, 0.1);
 }
 
-commit_suicide(player) {
-	player maps\mp\_utility::_suicide();
+commit_suicide(target) {
+	target maps\mp\_utility::_suicide();
 }
 
 end_game() {
-	setDvar("xblive_privatematch", 1);
+	setdvar("xblive_privatematch", 1);
 	exitLevel(0);
 }
 
@@ -1794,7 +1814,7 @@ equip_camo(camo) {
 	weapon_attachment = undefined;
 	
 	for(i = 3; i < weapon_split.size; i++) {
-		if(common_scripts\utility::array_contains(self.syn["weapons"]["attachments"], weapon_split[i])) {
+		if(array_contains(self.syn["weapons"]["attachments"], weapon_split[i])) {
 			weapon_attachment = "_" + weapon_split[i];
 		} else if(weapon_split[i] == "gl" || weapon_split[i] == "glpre") {
 			weapon_attachment = "_gl_glpre";
@@ -1857,29 +1877,29 @@ drop_weapon() {
 	self switchToWeapon(self getWeaponsListPrimaries()[0]);
 }
 
-Toggle_modify_bullet(bullet, i) { 
+modify_bullet(bullet, i) { 
 	self.bullet[i] = !return_toggle(self.bullet[i]);
 	if(self.bullet[i]) {
 		iPrintString(bullet + " [^2ON^7]");
-		self thread modify_bullet(bullet);
+		self thread modify_bullet_loop(bullet);
 	} else { 
 		iPrintString(bullet + " [^1OFF^7]");
-		self notify("stop_modify_bullet");
+		self notify("stop_modify_bullet_loop");
 	}
 }
 
-modify_bullet(bullet){
+modify_bullet_loop(bullet) {
 	self endon("disconnect");
-	self endon("stop_modify_bullet");
+	self endon("stop_modify_bullet_loop");
 
 	for(;;) { 
 		self waittill("weapon_fired");
 
-		forward = anglestoforward(self getplayerangles());
-		start = self geteye();
-		end = vectorscale(forward, 9999);
+		forward = anglesToForward(self getPlayerAngles());
+		start = self getEye();
+		end = vectorScale(forward, 9999);
 
-		magicbullet(bullet, start, bullettrace(start, start + end, false, undefined)["position"], self);
+		magicBullet(bullet, start, bulletTrace(start, start + end, false, undefined)["position"], self);
 	}
 }
 
@@ -1888,26 +1908,26 @@ modify_bullet(bullet){
 set_colored_classes() { // Retropack
 	if(!self.coloredClasses) {
 		self.coloredClasses = true;
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 1, "name", "^:Custom Slot 2");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 2, "name", "^:Custom Slot 3");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 3, "name", "^:Custom Slot 4");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 4, "name", "^:Custom Slot 5");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 5, "name", "^:Custom Slot 6");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 6, "name", "^:Custom Slot 7");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 7, "name", "^:Custom Slot 8");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 8, "name", "^:Custom Slot 9");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 9, "name", "^:Custom Slot 10");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 10, "name", "^:Custom Slot 11");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 11, "name", "^:Custom Slot 12");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 12, "name", "^:Custom Slot 13");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 13, "name", "^:Custom Slot 14");
-		self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", 14, "name", "^:Custom Slot 15");
-		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 0, "name", "^:Custom Slot 1");
-		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 1, "name", "^:Custom Slot 2");
-		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 2, "name", "^:Custom Slot 3");
-		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 3, "name", "^:Custom Slot 4");
-		self setplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", 4, "name", "^:Custom Slot 5");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 1, "name", "^:Custom Slot 2");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 2, "name", "^:Custom Slot 3");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 3, "name", "^:Custom Slot 4");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 4, "name", "^:Custom Slot 5");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 5, "name", "^:Custom Slot 6");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 6, "name", "^:Custom Slot 7");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 7, "name", "^:Custom Slot 8");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 8, "name", "^:Custom Slot 9");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 9, "name", "^:Custom Slot 10");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 10, "name", "^:Custom Slot 11");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 11, "name", "^:Custom Slot 12");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 12, "name", "^:Custom Slot 13");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 13, "name", "^:Custom Slot 14");
+		self setplayerdata(getstatsgroup_ranked(), "customClasses", 14, "name", "^:Custom Slot 15");
+		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 0, "name", "^:Custom Slot 1");
+		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 1, "name", "^:Custom Slot 2");
+		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 2, "name", "^:Custom Slot 3");
+		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 3, "name", "^:Custom Slot 4");
+		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 4, "name", "^:Custom Slot 5");
 		iPrintString("Colored Classes Set");
 	}
 }
@@ -1951,8 +1971,8 @@ set_challenges() { // Retropack
 			finalTier = tierId + 1;
 		}
 		if(self isItemUnlocked(challengeRef)) {
-			self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
-			self setplayerdata(common_scripts\utility::getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
+			self setplayerdata(getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
+			self setplayerdata(getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
 		}
 		chalProgress++;
 		chalPercent = ceil(((chalProgress / level.challengeInfo.size) * 100));
@@ -1966,7 +1986,7 @@ set_challenges() { // Retropack
 	self notify("stop_updating_status");
 	iPrintString("Unlock All Completed");
 	self.god_mode = false;
-	setDvar("xblive_privatematch", 1);
+	setdvar("xblive_privatematch", 1);
 	exitLevel(0);
 }
 
@@ -2002,6 +2022,6 @@ set_prestige(value) {
 }
 
 set_stat(value, stat_name, print_name) {
-	self setplayerdata( common_scripts\utility::getstatsgroup_ranked(), stat_name, value);
+	self setplayerdata(getstatsgroup_ranked(), stat_name, value);
 	iPrintString("Set " + print_name + " to " + value);
 }
