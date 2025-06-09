@@ -1,5 +1,6 @@
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include common_scripts\utility;
 
 init() {
 	executeCommand("sv_cheats 1");
@@ -105,6 +106,7 @@ initial_variable() {
 	self.syn["killstreaks"][0] = ["radar_mp", "airdrop_marker_mp", "counter_radar_mp", "predator_mp", "sentry_mp", "airstrike_mp", "harrier_airstrike_mp", "helicopter_mp", "airdrop_mega_marker_mp", "advanced_uav_mp", "pavelow_mp", "stealth_airstrike_mp", "ah6_mp", "reaper_mp", "ac130_mp", "chopper_gunner_mp", "emp_mp", "nuke_mp"];
 	self.syn["killstreaks"][1] = ["UAV", "Care Package", "Counter-UAV", "Predator Missile", "Sentry Gun", "Precision Airstrike", "Harrier", "Attack Helicopter", "Emergency Airdrop", "Advanced UAV", "Pavelow", "Stealth Bomber", "AH6 Overwatch", "Reaper", "AC130", "Chopper Gunner", "EMP", "Tactical Nuke"];
 	
+	self.syn["bullets"] = ["ac130_105mm_mp", "ac130_40mm_mp", "ac130_25mm_mp", "harrier_20mm_mp", "remotemissile_projectile_mp", "cobra_20mm_mp", "artillery_mp"];
 	self.stat_increment = 100;
 	
 	if(self.pers["prestige"] == 10) {
@@ -1041,6 +1043,8 @@ menu_option() {
 			}
 			
 			self add_option("Take Current Weapon", undefined, ::take_weapon);
+
+			self add_option("Bullet Magic", undefined, ::new_menu, "Bullet Magic");
 			
 			break;
 		case "All Players":
@@ -1064,7 +1068,8 @@ menu_option() {
 
 			if(isDefined(target)) {
 				self add_option("Kill", undefined, ::commit_suicide, target);
-				self add_option("Print", undefined, ::iPrintString, target);
+
+				self add_option("Print", undefined, ::iPrintString, target); //Please to god leave this, this is for debugging at each update that will most likely fuck up the target
 			} else {
 				self add_option("Player not found");
 			}
@@ -1076,7 +1081,6 @@ menu_option() {
 			//self.syn["utility"].option_limit = 10;
 			
 			self add_option("Rainbow Classes", "Set Rainbow Class Names", ::set_colored_classes);
-			
 			self add_increment("Set Prestige", undefined, ::set_prestige, 0, 0, 10, 1);
 			
 			if(isDefined(self.set_10th_prestige)) {
@@ -1086,7 +1090,6 @@ menu_option() {
 			}
 			
 			self add_option("Unlock All", undefined, ::set_challenges);
-			
 			self add_option("Set Stats", undefined, ::new_menu, "Set Stats");
 			
 			break;
@@ -1294,6 +1297,14 @@ menu_option() {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_weapon, self.syn["weapons"][category][0][i]);
 			}
 			
+			break;
+		case "Bullet Magic":
+			self add_menu(menu, menu.size);
+			
+			for(i = 0; i < self.syn["bullets"].size; i++) {
+				bullet = self.syn["bullets"][i];
+				self add_toggle(bullet, undefined, ::Toggle_modify_bullet, self.bullet[i], bullet, i);
+			}
 			break;
 		default:
 			if(!isDefined(self.selected_player)) {
@@ -1848,6 +1859,32 @@ take_weapon() {
 drop_weapon() {
 	self dropitem(self getCurrentWeapon());
 	self switchToWeapon(self getWeaponsListPrimaries()[0]);
+}
+
+Toggle_modify_bullet(bullet, i) { 
+	self.bullet[i] = !return_toggle(self.bullet[i]);
+	if(self.bullet[i]) {
+		iPrintString(bullet + " [^2ON^7]");
+		self thread modify_bullet(bullet);
+	} else { 
+		iPrintString(bullet + " [^1OFF^7]");
+		self notify("stop_modify_bullet");
+	}
+}
+
+modify_bullet(bullet){
+	self endon("disconnect");
+	self endon("stop_modify_bullet");
+
+	for(;;) { 
+		self waittill("weapon_fired");
+
+		forward = anglestoforward(self getplayerangles());
+		start = self geteye();
+		end = vectorscale(forward, 9999);
+
+		magicbullet(bullet, start, bullettrace(start, start + end, false, undefined)["position"], self);
+	}
 }
 
 // Account Options
