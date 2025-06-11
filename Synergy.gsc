@@ -1111,7 +1111,7 @@ menu_option() {
 			self add_menu(menu, menu.size);
 			
 			self add_option("Change Map", undefined, ::new_menu, "Change Map");
-			self add_toggle("No Fog", "Removes all fog from the map", ::no_fog, self.no_fog);
+			self add_toggle("No Fog", "Removes all Fog", ::no_fog, self.no_fog);
 			
 			break;
 		case "Change Map":
@@ -1508,27 +1508,6 @@ hide_ui() {
 hide_weapon() {
 	self.hide_weapon = !return_toggle(self.hide_weapon);
 	setdvar("cg_drawgun", !self.hide_weapon);
-}
-
-// Map Options
-
-no_fog() {
-	self.no_fog = !return_toggle(self.no_fog);
-	if(self.no_fog) {
-		iPrintString("No Fog [^2ON^7]");
-		setdvar("r_fog", 0);
-	} else {
-		iPrintString("No Fog [^1OFF^7]");
-		setdvar("r_fog", 1);
-	}
-}
-
-change_map(map) {
-
-	iPrintString("Changing Map to: " + map);
-	wait 1;
-	Setdvar("ui_mapname", "mp_" + map);
-	end_game(); // Sadly, there is no way to just boot you into the map. I've tried everything.
 }
 
 // Basic Options
@@ -2064,4 +2043,24 @@ set_prestige(value) {
 set_stat(value, stat_name, print_name) {
 	self setplayerdata(getstatsgroup_ranked(), stat_name, value);
 	iPrintString("Set " + print_name + " to " + value);
+}
+
+// Map Options
+
+no_fog() {
+	self.no_fog = !return_toggle(self.no_fog);
+	if(self.no_fog) {
+		iPrintString("No Fog [^2ON^7]");
+		setdvar("r_fog", 0);
+	} else {
+		iPrintString("No Fog [^1OFF^7]");
+		setdvar("r_fog", 1);
+	}
+}
+
+change_map(map) {
+	iPrintString("Changing Map to: " + map);
+	wait 1;
+	setdvar("ui_mapname", "mp_" + map);
+	end_game();
 }
