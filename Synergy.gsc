@@ -107,7 +107,9 @@ initial_variable() {
 	self.syn["killstreaks"][0] = ["radar_mp", "airdrop_marker_mp", "counter_radar_mp", "predator_mp", "sentry_mp", "airstrike_mp", "harrier_airstrike_mp", "helicopter_mp", "airdrop_mega_marker_mp", "advanced_uav_mp", "pavelow_mp", "stealth_airstrike_mp", "ah6_mp", "reaper_mp", "ac130_mp", "chopper_gunner_mp", "emp_mp", "nuke_mp"];
 	self.syn["killstreaks"][1] = ["UAV", "Care Package", "Counter-UAV", "Predator Missile", "Sentry Gun", "Precision Airstrike", "Harrier", "Attack Helicopter", "Emergency Airdrop", "Advanced UAV", "Pavelow", "Stealth Bomber", "AH6 Overwatch", "Reaper", "AC130", "Chopper Gunner", "EMP", "Tactical Nuke"];
 	// Bullets
-	self.syn["bullets"] = ["ac130_105mm_mp", "ac130_40mm_mp", "ac130_25mm_mp", "harrier_20mm_mp", "remotemissile_projectile_mp", "cobra_20mm_mp", "artillery_mp"];
+	self.syn["bullets"] = ["ac130_105mm_mp", "ac130_40mm_mp", "ac130_25mm_mp", "harrier_20mm_mp", "remotemissile_projectile_mp", "cobra_20mm_mp"];
+	// Map Names
+	self.syn["maps"] = ["underground", "trailerpark", "paris", "nightshift", "lambeth", "hardhat", "courtyard_ss", "complex", "compact", "checkpoint", "brecourt", "bravo", "bootleg", "vlobby_room", "abandon", "alpha", "crash", "crossfire", "backlot", "bog", "overgrown", "shipment", "strike", "wetwork", "vacant", "bloc", "countdown", "favela", "highrise", "invasion", "quarry", "rundown", "skidrow", "terminal", "underpass", "rust", "estate", "fuel2", "derail", "subbase", "storm", "boneyard", "afghan", "carbon", "interchange", "village"];
 	
 	if(self.pers["prestige"] == 10) {
 		self.set_10th_prestige = true;
@@ -1011,6 +1013,7 @@ menu_option() {
 			self add_option("Give Killstreaks", undefined, ::new_menu, "Give Killstreaks");
 			self add_option("Account Options", undefined, ::new_menu, "Account Options");
 			self add_option("Menu Options", undefined, ::new_menu, "Menu Options");
+			self add_option("Map Options", undefined, ::new_menu, "Map Options");
 			self add_option("All Players", undefined, ::new_menu, "All Players");
 			
 			break;
@@ -1103,6 +1106,22 @@ menu_option() {
 			self add_toggle("Hide UI", undefined, ::hide_ui, self.hide_ui);
 			self add_toggle("Hide Weapon", undefined, ::hide_weapon, self.hide_weapon);
 			
+			break;
+		case "Map Options":
+			self add_menu(menu, menu.size);
+			
+			self add_option("Change Map", undefined, ::new_menu, "Change Map");
+			self add_toggle("No Fog", "Removes all fog from the map", ::no_fog, self.no_fog);
+			
+			break;
+		case "Change Map":
+			self add_menu(menu, menu.size);
+			
+			for(i = 0; i < self.syn["maps"].size; i++) {
+				map = self.syn["maps"][i];
+				self add_option(map, undefined, ::change_map, map);
+			}
+
 			break;
 		case "All Players":
 			self add_menu(menu, menu.size);
@@ -1489,6 +1508,27 @@ hide_ui() {
 hide_weapon() {
 	self.hide_weapon = !return_toggle(self.hide_weapon);
 	setdvar("cg_drawgun", !self.hide_weapon);
+}
+
+// Map Options
+
+no_fog() {
+	self.no_fog = !return_toggle(self.no_fog);
+	if(self.no_fog) {
+		iPrintString("No Fog [^2ON^7]");
+		setdvar("r_fog", 0);
+	} else {
+		iPrintString("No Fog [^1OFF^7]");
+		setdvar("r_fog", 1);
+	}
+}
+
+change_map(map) {
+
+	iPrintString("Changing Map to: " + map);
+	wait 1;
+	Setdvar("ui_mapname", "mp_" + map);
+	end_game(); // Sadly, there is no way to just boot you into the map. I've tried everything.
 }
 
 // Basic Options
