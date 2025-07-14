@@ -17,6 +17,14 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 
 * If you aren't the Host of the Game the Menu won't work
 
+#### Pre-Patch Menu:
+
+* To use the Unlock All, Rainbow Classes, and Stat Setting Options you have to use the old [1.4.0 Menu/EXE](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Pre-Patch.zip)
+
+* Place the EXE in the Game Folder next to `hmw-mod.exe` and Launch it
+
+* You can use Unlock All, Rainbow Classes, and Stat Setting Options in this version, then play the Updated Version with the Updated Menu
+
 ## Credits
 
 This menu is based on [M203](https://github.com/Xeirh/M203) by [Xeirh](https://github.com/Xeirh)
