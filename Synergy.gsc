@@ -1073,10 +1073,6 @@ menu_option() {
 		case "Account Options":
 			self add_menu(menu, menu.size);
 			
-			//self.syn["utility"].option_limit = 10;
-			
-			self add_option("Rainbow Classes", "Set Rainbow Class Names", ::set_colored_classes);
-			
 			self add_increment("Set Prestige", undefined, ::set_prestige, 0, 0, 10, 1);
 			
 			if(isDefined(self.set_10th_prestige)) {
@@ -1084,10 +1080,6 @@ menu_option() {
 			} else {
 				self add_increment("Set Level", undefined, ::set_rank, 0, 0, 70, 1);
 			}
-			
-			self add_option("Unlock All", undefined, ::set_challenges);
-			
-			self add_option("Set Stats", undefined, ::new_menu, "Set Stats");
 			
 			break;
 		case "Menu Options":
@@ -1166,26 +1158,6 @@ menu_option() {
 				self add_option(self.syn["visions"][0][i], undefined, ::set_vision, self.syn["visions"][1][i]);
 			}
 
-			break;
-		case "Set Stats":
-			self add_menu(menu, menu.size);
-			
-			//self.syn["utility"].option_limit = 5;
-			
-			self add_increment("Set Increment", undefined, ::set_increment, 100, 100, 10000, 100);
-			
-			self add_increment("Kills", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "kills", "Kills");
-			self add_increment("Deaths", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "deaths", "Deaths");
-			self add_increment("Assists", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "assists", "Assists");
-			self add_increment("Melee Kills", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "meleeKills", "Melee Kills");
-			self add_increment("Environment Kills", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "destructibleKills", "Environment Kills");
-			
-			self add_increment("Wins", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "wins", "Wins");
-			self add_increment("Losses", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "losses", "Losses");
-			self add_increment("Games Played", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "gamesPlayed", "Games Played");
-			
-			self add_increment("Score", undefined, ::set_stat, 0, 0, 100000, self.stat_increment, undefined, undefined, "score", "Score");
-			
 			break;
 		case "Give Weapons":
 			self add_menu(menu, menu.size);
@@ -1924,91 +1896,6 @@ modify_bullet_loop(bullet) {
 
 // Account Options
 
-set_colored_classes() { // Retropack
-	if(!self.coloredClasses) {
-		self.coloredClasses = true;
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 1, "name", "^:Custom Slot 2");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 2, "name", "^:Custom Slot 3");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 3, "name", "^:Custom Slot 4");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 4, "name", "^:Custom Slot 5");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 5, "name", "^:Custom Slot 6");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 6, "name", "^:Custom Slot 7");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 7, "name", "^:Custom Slot 8");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 8, "name", "^:Custom Slot 9");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 9, "name", "^:Custom Slot 10");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 10, "name", "^:Custom Slot 11");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 11, "name", "^:Custom Slot 12");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 12, "name", "^:Custom Slot 13");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 13, "name", "^:Custom Slot 14");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 14, "name", "^:Custom Slot 15");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 0, "name", "^:Custom Slot 1");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 1, "name", "^:Custom Slot 2");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 2, "name", "^:Custom Slot 3");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 3, "name", "^:Custom Slot 4");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 4, "name", "^:Custom Slot 5");
-		iPrintString("Colored Classes Set");
-	}
-}
-
-update_status(element, text) {
-	self endOn("stop_updating_status");
-	status = text + "...";
-	for(;;) {
-		if(status == text + "...") {
-			status = text + ".";
-			element setText(status);
-		} else if(status == text + ".") {
-			status = text + "..";
-			element setText(status);
-		} else if(status == text + "..") {
-			status = text + "...";
-			element setText(status);
-		}
-		wait .5;
-	}
-}
-
-set_challenges() { // Retropack
-	self endon("disconnect");
-	self endon("death");
-	self.god_mode = true;
-	chalProgress = 0;
-	progress_bar = self create_shader("white", "top_left", "center", 0, -100, 1, 10, self.color_theme, 1, 9999);
-	progress_outline = self create_shader("white", "center", "top", 0, -105, 132, 37, self.color_theme, 1, 1);
-	progress_background = self create_shader("white", "center", "top", 0, -105, 130, 35, (0.075, 0.075, 0.075), 1, 2);
-	progress_text = self create_text("Unlocking All", "default", 1, "center", "top", 0, -115, (1,1,1), 1, 9999, true);
-	self thread update_status(progress_text, "Unlocking All");
-	if(self in_menu()) {
-		self close_menu();
-	}
-	foreach(challengeRef, challengeData in level.challengeInfo) {
-		finalTarget = 0;
-		finalTier = 0;
-		for (tierId = 1; isDefined(challengeData["targetval"][tierId]); tierId++) {
-			finalTarget = challengeData["targetval"][tierId];
-			finalTier = tierId + 1;
-		}
-		if(self isItemUnlocked(challengeRef)) {
-			self setplayerdata(getstatsgroup_ranked(), "challengeProgress", challengeRef, finalTarget);
-			self setplayerdata(getstatsgroup_ranked(), "challengeState", challengeRef, finalTier);
-		}
-		chalProgress++;
-		chalPercent = ceil(((chalProgress / level.challengeInfo.size) * 100));
-		progress_bar set_shader("white", int(chalPercent), 10);
-		waitframe();
-	}
-	progress_bar destroyElem();
-	progress_outline destroyElem();
-	progress_background destroyElem();
-	progress_text destroyElem();
-	self notify("stop_updating_status");
-	iPrintString("Unlock All Completed");
-	self.god_mode = false;
-	setdvar("xblive_privatematch", 1);
-	exitLevel(0);
-}
-
 set_rank(value) {
 	if(value != 0) {
 		value--;
@@ -2038,11 +1925,6 @@ set_prestige(value) {
 	
 	self maps\mp\gametypes\_persistence::statset("prestige", value);
 	iPrintString(self.name + "'s Prestige set to " + value);
-}
-
-set_stat(value, stat_name, print_name) {
-	self setplayerdata(getstatsgroup_ranked(), stat_name, value);
-	iPrintString("Set " + print_name + " to " + value);
 }
 
 // Map Options
