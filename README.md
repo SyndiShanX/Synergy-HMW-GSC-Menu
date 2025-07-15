@@ -2,7 +2,7 @@
 
 HorizonMW GSC Mod Menu
 
-This Menu is a Work-In-Progress, so expect changes and possibly some Bugs
+This Menu is a Work-in-Progress, so expect changes and possibly some Bugs
 
 If you use any Code from my Menu, your Menu also has to be Open-Source as per the [GNU GPLv3 License](https://github.com/SyndiShanX/Synergy-HMW-GSC-Menu/blob/main/LICENSE.md)
 
@@ -13,17 +13,11 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 #### Installation:
 * Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc) and [patches.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/patches.gsc)
 
+* Download the [After Patch DLL](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/After-Patch-GSC.dll) and Inject it using [Process Hacker 2](https://sourceforge.net/projects/processhacker/files/processhacker2/processhacker-2.39-setup.exe/download)
+
 * Place them into `hmw-mod/scripts/mp`, then Load into a Private Match and Enjoy
 
 * If you aren't the Host of the Game the Menu won't work
-
-#### Pre-Patch Menu:
-
-* To use the Unlock All, Rainbow Classes, and Stat Setting Options you have to use the old [1.4.0 Menu/EXE](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Pre-Patch.zip)
-
-* Place the EXE in the Game Folder next to `hmw-mod.exe` and Launch it
-
-* You can use Unlock All, Rainbow Classes, and Stat Setting Options in this version, then play the Updated Version with the Updated Menu
 
 ## Credits
 
@@ -36,3 +30,5 @@ This menu is based on [M203](https://github.com/Xeirh/M203) by [Xeirh](https://g
   * `Joel` Suggestions
 	
 Some functions are from [Retropack](https://github.com/justinabellera/retro-pack) by [Rtros](https://github.com/justinabellera)
+
+The [After Patch DLL](https://www.unknowncheats.me/forum/call-of-duty-4-modern-warfare/709370-patch-fix-please-remove-name-gsc-scripts-folder.html) was made by [EFKMODZ](https://www.unknowncheats.me/forum/members/2263667.html)
