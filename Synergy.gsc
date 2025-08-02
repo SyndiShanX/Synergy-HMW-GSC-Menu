@@ -49,6 +49,7 @@ initial_variable() {
 	self.menu_color_green = 255;
 	self.menu_color_blue = 255;
 	self.color_theme = "rainbow";
+	level.bot_difficulty = "Recruit";
 	
 	self.syn["visions"][0] = ["None", "AC-130", "AC-130 inverted", "Black & White", "Endgame", "Night", "Night Vision", "MP Intro", "MP Nuke Aftermath", "Sepia"];
 	self.syn["visions"][1] = ["", "ac130", "ac130_inverted", "missilecam", "end_game", "default_night", "default_night_mp", "mpintro", "mpnuke_aftermath", "sepia"];
@@ -1122,6 +1123,8 @@ menu_option() {
 		case "Bot Options":
 			self add_menu(menu, menu.size);
 			
+			self add_array("Set Difficulty", undefined, ::set_difficulty, ["Recruit", "Regular", "Hardened", "Veteran"]);
+			
 			self add_option("Spawn Friendly Bot", undefined, ::spawn_friendly_bot);
 			self add_option("Spawn Enemy Bot", undefined, ::spawn_enemy_bot);
 			self add_option("Kick Random Bot", undefined, ::kick_random_bot);
@@ -1149,7 +1152,13 @@ menu_option() {
 			if(isDefined(target)) {
 				self add_option("Print", "Print Player Name", ::iPrintString, target);
 				self add_option("Kill", "Kill the Player", ::commit_suicide, target);
-				self add_option("Kick", "Kick the Player from the Game", ::kick_player, target);
+				
+				if(isBot(target)) {
+					self add_option("Get Difficulty", undefined, ::get_difficulty, target);
+				}
+				if(!target isHost()) {
+					self add_option("Kick", "Kick the Player from the Game", ::kick_player, target);
+				}
 			} else {
 				self add_option("Player not found");
 			}
@@ -2047,6 +2056,15 @@ change_map(map) {
 
 // Bot Options
 
+set_difficulty(difficulty) {
+	level.bot_difficulty = difficulty;
+	iPrintString(level.bot_difficulty);
+}
+
+get_difficulty(target) {
+	iPrintString(target.difficulty);
+}
+
 spawn_friendly_bot() {
 	level thread spawn_bot(self.team);
 }
@@ -2065,18 +2083,11 @@ kick_random_bot() {
 	}
 }
 
-spawn_bot(team, num, restart, delay) { // Retropack
-	if (!isDefined(num) || num == 0) {
-		num = 1;
-	}
-
-	for (i = 0; i < num; i++) {
-		wait(delay);
-		level thread _spawn_bot(1, team, undefined, "spawned_player", "Recruit", restart);
-	}
+spawn_bot(team) { // Retropack
+	level thread _spawn_bot(1, team, undefined, "spawned_player", level.bot_difficulty);
 }
 
-_spawn_bot(count, team, callback, notifyWhenDone, difficulty, restart) { // Retropack
+_spawn_bot(count, team, callback, notifyWhenDone, difficulty) { // Retropack
 	time = getTime() + 10000;
 	connectingArray = [];
 	squad_index = connectingArray.size;
@@ -2110,11 +2121,6 @@ _spawn_bot(count, team, callback, notifyWhenDone, difficulty, restart) { // Retr
 
 	if (isDefined(notifyWhenDone)) {
 		self notify(notifyWhenDone);
-	}
-
-	if (isDefined(restart) && restart && getDvar("g_gametype") == "sd") {
-		wait 3;
-		maps\mp\gametypes\common_sd_sr::sd_endGame(game["defenders"], game["end_reason"]["time_limit_reached"]);
 	}
 }
 
