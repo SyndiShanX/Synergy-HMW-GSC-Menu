@@ -257,7 +257,7 @@ event_system() {
 }
 
 session_expired() {
-	level waittill("game_ended");
+	level waitTill("game_ended");
 	level endon("game_ended");
 	foreach(index, player in level.players) {
 		if(!player has_access()) {
@@ -1013,6 +1013,7 @@ menu_option() {
 			self add_option("Account Options", undefined, ::new_menu, "Account Options");
 			self add_option("Menu Options", undefined, ::new_menu, "Menu Options");
 			self add_option("Map Options", undefined, ::new_menu, "Map Options");
+			self add_option("Bot Options", undefined, ::new_menu, "Bot Options");
 			self add_option("All Players", undefined, ::new_menu, "All Players");
 			
 			break;
@@ -1118,6 +1119,14 @@ menu_option() {
 			}
 
 			break;
+		case "Bot Options":
+			self add_menu(menu, menu.size);
+			
+			self add_option("Spawn Friendly Bot", undefined, ::spawn_friendly_bot);
+			self add_option("Spawn Enemy Bot", undefined, ::spawn_enemy_bot);
+			self add_option("Kick Random Bot", undefined, ::kick_random_bot);
+			
+			break;
 		case "All Players":
 			self add_menu(menu, menu.size);
 
@@ -1138,8 +1147,9 @@ menu_option() {
 			}
 
 			if(isDefined(target)) {
-				self add_option("Kill", undefined, ::commit_suicide, target);
-				self add_option("Print", undefined, ::iPrintString, target);
+				self add_option("Print", "Print Player Name", ::iPrintString, target);
+				self add_option("Kill", "Kill the Player", ::commit_suicide, target);
+				self add_option("Kick", "Kick the Player from the Game", ::kick_player, target);
 			} else {
 				self add_option("Player not found");
 			}
@@ -1690,6 +1700,10 @@ commit_suicide(target) {
 	target maps\mp\_utility::_suicide();
 }
 
+kick_player(target) {
+	kick(target getEntityNumber());
+}
+
 end_game() {
 	setdvar("xblive_privatematch", 1);
 	exitLevel(0);
@@ -1706,7 +1720,7 @@ give_killstreak(streak) { // Retropack
 give_perk(perk, pro_perk) { // Retropack
 	self maps\mp\_utility::giveperk(perk);
 	self maps\mp\_utility::giveperk(pro_perk);
-	waitframe();
+	waitFrame();
 	maps\mp\perks\_perks::applyperks();
 }
 
@@ -1883,7 +1897,7 @@ modify_bullet_loop(bullet) {
 	self endon("stop_modify_bullet_loop");
 
 	for(;;) { 
-		self waittill("weapon_fired");
+		self waitTill("weapon_fired");
 
 		forward = anglesToForward(self getPlayerAngles());
 		start = self getEye();
@@ -1967,7 +1981,7 @@ set_challenges() { // Retropack
 		chalProgress++;
 		chalPercent = ceil(((chalProgress / level.challengeInfo.size) * 100));
 		progress_bar set_shader("white", int(chalPercent), 10);
-		waitframe();
+		waitFrame();
 	}
 	progress_bar destroyElem();
 	progress_outline destroyElem();
@@ -2029,4 +2043,84 @@ change_map(map) {
 	wait 1;
 	setdvar("ui_mapname", "mp_" + map);
 	end_game();
+}
+
+// Bot Options
+
+spawn_friendly_bot() {
+	level thread spawn_bot(self.team);
+}
+
+spawn_enemy_bot() {
+	level thread spawn_bot(maps\mp\gametypes\_gameobjects::getenemyteam(self.team));
+}
+
+kick_random_bot() {
+	random_num = int(randomintrange(0, level.players.size));
+	if(isBot(level.players[random_num])) {
+		kick(level.players[random_num] getEntityNumber());
+		return;
+	} else {
+		kick_random_bot();
+	}
+}
+
+spawn_bot(team, num, restart, delay) { // Retropack
+	if (!isDefined(num) || num == 0) {
+		num = 1;
+	}
+
+	for (i = 0; i < num; i++) {
+		wait(delay);
+		level thread _spawn_bot(1, team, undefined, "spawned_player", "Recruit", restart);
+	}
+}
+
+_spawn_bot(count, team, callback, notifyWhenDone, difficulty, restart) { // Retropack
+	time = getTime() + 10000;
+	connectingArray = [];
+	squad_index = connectingArray.size;
+	while (level.players.size < maps\mp\bots\_bots_util::bot_get_client_limit() && connectingArray.size < count && getTime() < time) {
+		maps\mp\gametypes\_hostMigration::waitLongDurationWithHostMigrationPause(0.05);
+		botEnt = addBot("[BOT]Synergy", team);
+		connecting = spawnstruct();
+		connecting.bot = botEnt;
+		connecting.ready = 0;
+		connecting.abort = 0;
+		connecting.index = squad_index;
+		connecting.difficulty = difficulty;
+		connectingArray[connectingArray.size] = connecting;
+		connecting.bot thread maps\mp\bots\_bots::spawn_bot_latent(team, callback, connecting);
+		connecting.bot set_team_forced(team);
+		squad_index++;
+		waitFrame();
+	}
+
+	connectedComplete = 0;
+	time = getTime() + 60000;
+	while (connectedComplete < connectingArray.size && getTime() < time) {
+		connectedComplete = 0;
+		foreach(connecting in connectingArray) {
+			if (connecting.ready || connecting.abort) {
+				connectedComplete++;
+			}
+		}
+		wait 0.05;
+	}
+
+	if (isDefined(notifyWhenDone)) {
+		self notify(notifyWhenDone);
+	}
+
+	if (isDefined(restart) && restart && getDvar("g_gametype") == "sd") {
+		wait 3;
+		maps\mp\gametypes\common_sd_sr::sd_endGame(game["defenders"], game["end_reason"]["time_limit_reached"]);
+	}
+}
+
+set_team_forced(team) { // Retropack
+	self waitTill_any("joined_team");
+	waitFrame();
+	self.pers["forced_team"] = team;
+	self maps\mp\gametypes\_menus::addToTeam(team, true);
 }
