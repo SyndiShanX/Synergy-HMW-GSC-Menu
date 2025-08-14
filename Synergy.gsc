@@ -1968,29 +1968,15 @@ modify_bullet_loop(bullet) {
 
 // Account Options
 
-set_colored_classes() { // Retropack
+set_colored_classes() {
 	if(!self.coloredClasses) {
 		self.coloredClasses = true;
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 0, "name", "^:Custom Slot 1");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 1, "name", "^:Custom Slot 2");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 2, "name", "^:Custom Slot 3");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 3, "name", "^:Custom Slot 4");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 4, "name", "^:Custom Slot 5");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 5, "name", "^:Custom Slot 6");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 6, "name", "^:Custom Slot 7");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 7, "name", "^:Custom Slot 8");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 8, "name", "^:Custom Slot 9");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 9, "name", "^:Custom Slot 10");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 10, "name", "^:Custom Slot 11");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 11, "name", "^:Custom Slot 12");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 12, "name", "^:Custom Slot 13");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 13, "name", "^:Custom Slot 14");
-		self setplayerdata(getstatsgroup_ranked(), "customClasses", 14, "name", "^:Custom Slot 15");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 0, "name", "^:Custom Slot 1");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 1, "name", "^:Custom Slot 2");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 2, "name", "^:Custom Slot 3");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 3, "name", "^:Custom Slot 4");
-		self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", 4, "name", "^:Custom Slot 5");
+		for(i = 0; i < 15; i++) {
+			self setplayerdata(getstatsgroup_ranked(), "customClasses", i, "name", "^:" + self getplayerdata(common_scripts\utility::getstatsgroup_ranked(), "customClasses", i, "name"));
+		}
+		for(i = 0; i < 5; i++) {
+			self setplayerdata(getstatsgroup_private(), "privateMatchCustomClasses", i, "name", "^:" + self getplayerdata(common_scripts\utility::getstatsgroup_private(), "privateMatchCustomClasses", i, "name"));
+		}
 		iPrintString("Colored Classes Set");
 	}
 }
