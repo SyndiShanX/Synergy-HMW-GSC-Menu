@@ -8,7 +8,7 @@ init() {
 	level initial_precache();
 	level thread player_connect();
 	level thread create_rainbow_color();
-	
+
 	replaceFunc(maps\mp\gametypes\_gamelogic::onForfeit, ::return_false); // Retropack
 	replaceFunc(maps\mp\gametypes\_gamelogic::matchstarttimerwaitforplayers, maps\mp\gametypes\_gamelogic::matchStartTimerSkip); //SimonLFC - Retropack
 	level.OriginalCallbackPlayerDamage = level.callbackPlayerDamage; //doktorSAS - Retropack
@@ -20,7 +20,6 @@ init() {
 
 initial_precache() {
 	precacheshader("ui_scrollbar_arrow_right");
-	precacheshader("ui_scrollbar_arrow_left");
 }
 
 initial_variable() {
@@ -41,19 +40,19 @@ initial_variable() {
 	self.description_enabled = true;
 	self.randomizing_enabled = true;
 	self.scrolling_buffer = 3;
-	
+
 	self set_menu();
 	self set_title();
-	
+
 	self.menu_color_red = 255;
 	self.menu_color_green = 255;
 	self.menu_color_blue = 255;
 	self.color_theme = "rainbow";
 	level.bot_difficulty = "Recruit";
-	
+
 	self.syn["visions"][0] = ["None", "AC-130", "AC-130 inverted", "Black & White", "Endgame", "Night", "Night Vision", "MP Intro", "MP Nuke Aftermath", "Sepia"];
 	self.syn["visions"][1] = ["", "ac130", "ac130_inverted", "missilecam", "end_game", "default_night", "default_night_mp", "mpintro", "mpnuke_aftermath", "sepia"];
-	
+
 	self.syn["weapons"]["category"][0] = ["assault_rifles", "sub_machine_guns", "sniper_rifles", "light_machine_guns", "machine_pistols", "shotguns", "pistols", "launchers", "melee", "equipment"];
 	self.syn["weapons"]["category"][1] = ["Assault Rifles", "Sub Machine Guns", "Sniper Rifles", "Light Machine Guns", "Machine Pistols", "Shotguns", "Pistols", "Launchers", "Melee Weapons", "Equipment"];
 	// Weapon IDs Plus Default Attachments
@@ -108,7 +107,7 @@ initial_variable() {
 	//self.syn["perks"][1] = ["Tactical Insertion", "Blast Shield"];
 	self.syn["perks"][0] = ["specialty_bling", "specialty_radarimmune", "specialty_extendedmelee", "specialty_explosivedamage", "specialty_hardline", "specialty_pistoldeath", "specialty_lightweight", "specialty_longersprint", "specialty_heartbreaker", "specialty_onemanarmy", "specialty_scavenger", "specialty_localjammer", "specialty_detectexplosive", "specialty_fastreload", "specialty_bulletaccuracy", "specialty_bulletdamage"];
 	self.syn["perks"][1] = ["Bling", "Cold Blooded", "Commando", "Danger Close", "Hardline", "Last Stand", "Lightweight", "Marathon", "Ninja", "One Man Army", "Scavenger", "Scrambler", "Sitrep", "Sleight of Hand", "Steady Aim", "Stopping Power"];
-	
+
 	self.syn["perks"][2] = ["specialty_secondarybling", "specialty_spygame", "specialty_falldamage", "specialty_dangerclose", "specialty_rollover", "specialty_laststandoffhand", "specialty_fastsprintrecovery", "specialty_fastmantle", "specialty_quieter", "specialty_omaquickchange", "specialty_extraammo", "specialty_delaymine", "specialty_selectivehearing", "specialty_quickdraw", "specialty_holdbreath", "specialty_armorpiercing"];
 	self.syn["perks"][3] = ["Bling Pro", "Cold Blooded Pro", "Commando Pro", "Danger Close Pro", "Hardline Pro", "Last Stand Pro", "Lightweight Pro", "Marathon Pro", "Ninja Pro", "One Man Army Pro", "Scavenger Pro", "Scrambler Pro", "Sitrep Pro", "Sleight of Hand Pro", "Steady Aim Pro", "Stopping Power Pro"];
 	// Killstreaks
@@ -120,13 +119,13 @@ initial_variable() {
 	// Map Names
 	self.syn["maps"][0] = ["convoy", "backlot", "bog_summer", "bloc", "bog", "broadcast", "carentan", "countdown", "crash", "creek", "crossfire", "farm_spring", "citystreets", "downpour", "vlobby_room", "killhouse", "overgrown", "pipeline", "shipment", "showdown", "strike", "vacant", "cargoship", "crash_snow"];
 	self.syn["maps"][1] = ["Ambush", "Backlot", "Beach Bog", "Bloc", "Bog", "Broadcast", "Chinatown", "Countdown", "Crash", "Creek", "Crossfire", "Daybreak", "District", "Downpour", "Firing Range", "Killhouse", "Overgrown", "Pipeline", "Shipment", "Showdown", "Strike", "Vacant", "Wet Work", "Winter Crash"];
-	
+
 	self.syn["maps"][2] = ["afghan", "complex", "abandon", "derail", "estate", "favela", "fuel2", "highrise", "invasion", "checkpoint", "quarry", "rundown", "rust", "compact", "boneyard", "nightshift", "storm", "subbase", "terminal", "trailerpark", "underpass", "brecourt"];
 	self.syn["maps"][3] = ["Afghan", "Bailout", "Carnival", "Derail", "Estate", "Favela", "Fuel", "Highrise", "Invasion", "Karachi", "Quarry", "Rundown", "Rust", "Salvage", "Scrapyard", "Skidrow", "Storm", "Sub Base", "Terminal", "Trailer Park", "Underpass", "Wasteland"];
-	
+
 	self.syn["maps"][4] = ["bootleg", "dome", "courtyard_ss", "lambeth", "hardhat", "alpha", "bravo", "paris", "underground"];
 	self.syn["maps"][5] = ["Bootleg", "Dome", "Erosion", "Fallen", "Hardhat", "Lockdown", "Mission", "Resistance", "Underground"];
-	
+
 	if(self.pers["prestige"] == 10) {
 		self.set_10th_prestige = true;
 	}
@@ -135,6 +134,7 @@ initial_variable() {
 initial_observer() {
 	level endon("game_ended");
 	self endon("disconnect");
+
 	while(self has_access()) {
 		if(!self in_menu()) {
 			if(self adsButtonPressed() && self meleeButtonPressed()) {
@@ -144,7 +144,7 @@ initial_observer() {
 
 				close_controls_menu();
 				self open_menu();
-				
+
 				while(self adsButtonPressed() && self meleeButtonPressed()) {
 					wait 0.2;
 				}
@@ -193,19 +193,19 @@ initial_observer() {
 
 				wait (0.05 * self.scrolling_buffer);
 			} else if(self useButtonPressed()) {
-				if(isDefined(self.structure[cursor]) && isDefined(self.structure[cursor].function)) {
+				if(isDefined(self.structure[cursor]) && isDefined(self.structure[cursor].command)) {
 					if(self.interaction_enabled) {
 						self playSoundToPlayer("mp_ui_decline", self);
 					}
-					
-					if(self.structure[cursor].function == ::new_menu) {
+
+					if(self.structure[cursor].command == ::new_menu) {
 						self.previous_option = self.structure[cursor].text;
 					}
 
 					if(isDefined(self.structure[cursor].array) || isDefined(self.structure[cursor].increment)) {
-						self thread execute_function(self.structure[cursor].function, isDefined(self.structure[cursor].array) ? self.structure[cursor].array[self.slider[(menu + "_" + cursor)]] : self.slider[(menu + "_" + cursor)], self.structure[cursor].parameter_1, self.structure[cursor].parameter_2);
+						self thread execute_function(self.structure[cursor].command, isDefined(self.structure[cursor].array) ? self.structure[cursor].array[self.slider[(menu + "_" + cursor)]] : self.slider[(menu + "_" + cursor)], self.structure[cursor].parameter_1, self.structure[cursor].parameter_2);
 					} else {
-						self thread execute_function(self.structure[cursor].function, self.structure[cursor].parameter_1, self.structure[cursor].parameter_2);
+						self thread execute_function(self.structure[cursor].command, self.structure[cursor].parameter_1, self.structure[cursor].parameter_2);
 					}
 
 					if(isDefined(self.structure[cursor]) && isDefined(self.structure[cursor].toggle)) {
@@ -225,7 +225,8 @@ initial_observer() {
 event_system() {
 	level endon("game_ended");
 	self endon("disconnect");
-	for (;;) {
+
+	for(;;) {
 		event_name = self waittill_any_return("spawned_player", "player_downed", "death", "joined_spectators");
 		switch (event_name) {
 			case "spawned_player":
@@ -233,30 +234,30 @@ event_system() {
 				self.spawn_angles = self.angles;
 				if(!isDefined(self.finalized) && self has_access()) {
 					self.finalized = true;
-					
+
 					if(self isHost()) {
 						self freezeControls(false);
 					}
-					
+
 					setDvar("xblive_privatematch", 0);
-		
+
 					self initial_variable();
 					self thread initial_observer();
-					
+
 					self.controls["title"] = self create_text("Controls", self.font, self.font_scale, "TOP_LEFT", "TOPCENTER", (self.x_offset + 99), (self.y_offset + 4), self.color_theme, 1, 10);
 					self.controls["separator"][0] = self create_shader("white", "TOP_LEFT", "TOPCENTER", 181, (self.y_offset + 7.5), 37, 1, self.color_theme, 1, 10);
 					self.controls["separator"][1] = self create_shader("white", "TOP_RIGHT", "TOPCENTER", 399, (self.y_offset + 7.5), 37, 1, self.color_theme, 1, 10);
 					self.controls["border"] = self create_shader("white", "TOP_LEFT", "TOPCENTER", self.x_offset, (self.y_offset - 1), (self.width + 250), 97, self.color_theme, 1, 1);
 					self.controls["background"] = self create_shader("white", "TOP_LEFT", "TOPCENTER", (self.x_offset + 1), self.y_offset, (self.width + 248), 95, (0.075, 0.075, 0.075), 1, 2);
 					self.controls["foreground"] = self create_shader("white", "TOP_LEFT", "TOPCENTER", (self.x_offset + 1), (self.y_offset + 16), (self.width + 248), 79, (0.1, 0.1, 0.1), 1, 3);
-					
+
 					self.controls["text"][0] = self create_text("Open: ^3[{+speed_throw}] ^7and ^3[{+melee}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 20), (0.75, 0.75, 0.75), 1, 10);
 					self.controls["text"][1] = self create_text("Scroll: ^3[{+speed_throw}] ^7and ^3[{+attack}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 40), (0.75, 0.75, 0.75), 1, 10);
 					self.controls["text"][2] = self create_text("Select: ^3[{+activate}] ^7Back: ^3[{+melee}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 60), (0.75, 0.75, 0.75), 1, 10);
 					self.controls["text"][3] = self create_text("Sliders: ^3[{+smoke}] ^7and ^3[{+frag}]", self.font, 0.9, "TOP_LEFT", "TOPCENTER", (self.x_offset + 4), (self.y_offset + 80), (0.75, 0.75, 0.75), 1, 10);
-					
+
 					wait 8;
-					
+
 					close_controls_menu();
 				}
 				break;
@@ -264,7 +265,7 @@ event_system() {
 				if(!self has_access()) {
 					continue;
 				}
-		
+
 				if(self in_menu()) {
 					self close_menu();
 				}
@@ -274,8 +275,9 @@ event_system() {
 }
 
 session_expired() {
-	level waitTill("game_ended");
+	level waittill("game_ended");
 	level endon("game_ended");
+
 	foreach(index, player in level.players) {
 		if(!player has_access()) {
 			continue;
@@ -288,14 +290,16 @@ session_expired() {
 }
 
 player_connect() {
+	level endon("game_ended");
+
 	for(;;) {
-		level waitTill("connected", player);
+		level waittill("connected", player);
 		player.access = player isHost() ? "Host" : "None";
-		
+
 		if(isBot(player)) {
 			return;
 		}
-		
+
 		player thread event_system();
 	}
 }
@@ -304,11 +308,14 @@ player_disconnect() {
 	[[level.player_disconnect]]();
 }
 
-player_damage(einflictor, eattacker, idamage, idflags, smeansofdeath, sweapon, vpoint, vdir, shitloc, psoffsettime) {
+player_damage_callback(inflictor, attacker, damage, flags, death_reason, weapon, point, direction, hit_location, time_offset) {
+	self endon("disconnect");
+
 	if(isDefined(self.god_mode) && self.god_mode) {
 		return;
 	}
-	[[level.player_damage]](einflictor, eattacker, idamage, idflags, smeansofdeath, sweapon, vpoint, vdir, shitloc, psoffsettime);
+
+	[[level.OriginalCallbackPlayerDamage]](inflictor, attacker, damage, flags, death_reason, weapon, point, direction, hit_location, time_offset);
 }
 
 player_downed(einflictor, eattacker, idamage, smeansofdeath, sweapon, vdir, shitloc, psoffsettime, deathanimduration) {
@@ -323,7 +330,7 @@ in_array(array, item) {
 		return;
 	}
 
-	for (a = 0; a < array.size; a++) {
+	for(a = 0; a < array.size; a++) {
 		if(array[a] == item) {
 			return true;
 		}
@@ -348,7 +355,9 @@ create_rainbow_color() {
 	x = 0; y = 0;
 	r = 0; g = 0; b = 0;
 	level.rainbow_color = (0, 0, 0);
-	
+
+	level endon("game_ended");
+
 	while(true) {
 		if(y >= 0 && y < 258) {
 			r = 255;
@@ -375,23 +384,25 @@ create_rainbow_color() {
 			g = 255 - x;
 			b = 0;
 		}
-		
+
 		x += 3;
 		if(x > 255) {
 			x = 0;
 		}
-		
+
 		y += 3;
 		if(y > 1545) {
 			y = 0;
 		}
-		
+
 		level.rainbow_color = (r/255, g/255, b/255);
 		wait .05;
 	}
 }
 
 start_rainbow() {
+	level endon("game_ended");
+
 	while(isDefined(self)) {
 		self fadeOverTime(.05);
 		self.color = level.rainbow_color;
@@ -407,24 +418,26 @@ create_text(text, font, font_scale, align_x, align_y, x_offset, y_offset, color,
 	textElement.sort = z_index;
 	textElement.anchor = self;
 	textElement.archived = self auto_archive();
-	
+
 	if(isDefined(hide_when_in_menu)) {
 		textElement.hideWhenInMenu = hide_when_in_menu;
 	} else {
 		textElement.hideWhenInMenu = true;
 	}
-	
+
 	if(color != "rainbow") {
 		textElement.color = color;
 	} else {
 		textElement.color = level.rainbow_color;
 		textElement thread start_rainbow();
 	}
-	
-	if(isNumber(text)) {
-		textElement setValue(text);
-	} else {
-		textElement set_text(text);
+
+	if(isDefined(text)) {
+		if(isNumber(text)) {
+			textElement setValue(text);
+		} else {
+			textElement set_text(text);
+		}
 	}
 
 	self.element_result++;
@@ -439,13 +452,13 @@ create_shader(shader, align_x, align_y, x_offset, y_offset, width, height, color
 	shaderElement.sort = z_index;
 	shaderElement.anchor = self;
 	shaderElement.archived = self auto_archive();
-	
+
 	if(isDefined(hide_when_in_menu)) {
 		shaderElement.hideWhenInMenu = hide_when_in_menu;
 	} else {
 		shaderElement.hideWhenInMenu = true;
 	}
-	
+
 	if(color != "rainbow") {
 		shaderElement.color = color;
 	} else {
@@ -455,7 +468,7 @@ create_shader(shader, align_x, align_y, x_offset, y_offset, width, height, color
 
 	shaderElement setParent(level.uiParent);
 	shaderElement setPoint(align_x, align_y, x_offset, y_offset);
-	
+
 	shaderElement set_shader(shader, width, height);
 
 	self.element_result++;
@@ -519,11 +532,11 @@ clean_text(text) {
 
 	text = strTok(toLower(text), "_");
 	new_string = "";
-	for (a = 0; a < text.size; a++) {
+	for(a = 0; a < text.size; a++) {
 		illegal = ["player", "weapon", "wpn", "viewmodel", "camo"];
 		replacement = " ";
 		if(in_array(illegal, text[a])) {
-			for (b = 0; b < text[a].size; b++) {
+			for(b = 0; b < text[a].size; b++) {
 				if(b != 0) {
 					new_string += text[a][b];
 				} else {
@@ -547,7 +560,7 @@ clean_name(name) {
 
 	illegal = ["^A", "^B", "^F", "^H", "^I", "^0", "^1", "^2", "^3", "^4", "^5", "^6", "^7", "^8", "^9", "^:"];
 	new_string = "";
-	for (a = 0; a < name.size; a++) {
+	for(a = 0; a < name.size; a++) {
 		if(a < (name.size - 1)) {
 			if(in_array(illegal, (name[a] + name[(a + 1)]))) {
 				a += 2;
@@ -582,7 +595,7 @@ destroy_all(array) {
 	}
 
 	keys = getarraykeys(array);
-	for (a = 0; a < keys.size; a++) {
+	for(a = 0; a < keys.size; a++) {
 		if(isArray(array[keys[a]])) {
 			foreach(index, value in array[keys[a]]) {
 				if(isDefined(value)) {
@@ -599,7 +612,7 @@ destroy_all(array) {
 
 destroy_option() {
 	element = ["text", "submenu", "toggle", "slider"];
-	for (a = 0; a < element.size; a++) {
+	for(a = 0; a < element.size; a++) {
 		if(isDefined(self.menu[element[a]]) && self.menu[element[a]].size) {
 			destroy_all(self.menu[element[a]]);
 		}
@@ -614,7 +627,7 @@ get_name() {
 		return name;
 	}
 
-	for (a = (name.size - 1); a >= 0; a--) {
+	for(a = (name.size - 1); a >= 0; a--) {
 		if(name[a] == "]") {
 			break;
 		}
@@ -696,62 +709,65 @@ empty_option() {
 
 empty_function() {}
 
-execute_function(function, parameter_1, parameter_2, parameter_3) {
+execute_function(command, parameter_1, parameter_2, parameter_3) {
 	self endon("disconnect");
-	if(!isDefined(function)) {
+
+	if(!isDefined(command)) {
 		return;
 	}
 
 	if(isDefined(parameter_3)) {
-		return self thread[[function]](parameter_1, parameter_2, parameter_3);
+		return self thread[[command]](parameter_1, parameter_2, parameter_3);
 	}
 
 	if(isDefined(parameter_2)) {
-		return self thread[[function]](parameter_1, parameter_2);
+		return self thread[[command]](parameter_1, parameter_2);
 	}
 
 	if(isDefined(parameter_1)) {
-		return self thread[[function]](parameter_1);
+		return self thread[[command]](parameter_1);
 	}
 
-	self thread[[function]]();
+	self thread[[command]]();
 }
 
 add_menu(title, menu_size, extra) {
 	self.structure = [];
 	self set_title(title);
-	
+
 	if(!isDefined(self get_cursor())) {
 		self set_cursor();
 	}
-	
-	if(isDefined(extra)) {
-		self.menu["title"].x = (self.x_offset + 106) - menu_size - extra;
-	} else {
-		if(menu_size <= 7) {
-			self.menu["title"].x = (self.x_offset + 106) - menu_size;
+
+	if(isDefined(self.menu["title"])) {
+		if(isDefined(extra)) {
+			self.menu["title"].x = (self.x_offset + 106) - menu_size - extra;
 		} else {
-			self.menu["title"].x = (self.x_offset + 106) - (menu_size * 1.4);
+			if(menu_size <= 7) {
+				self.menu["title"].x = (self.x_offset + 106) - menu_size;
+			} else {
+				self.menu["title"].x = (self.x_offset + 106) - (menu_size * 1.4);
+			}
 		}
 	}
 }
 
-add_option(text, description, function, parameter_1, parameter_2) {
+add_option(text, description, command, parameter_1, parameter_2) {
 	option = spawnStruct();
 	option.text = text;
 	option.description = description;
-	option.function = isDefined(function) ? function : ::empty_function;
+	option.command = isDefined(command) ? command : ::empty_function;
 	option.parameter_1 = parameter_1;
 	option.parameter_2 = parameter_2;
 
 	self.structure[self.structure.size] = option;
 }
 
-add_toggle(text, description, function, variable, parameter_1, parameter_2) {
+add_toggle(text, description, command, variable, parameter_1, parameter_2) {
 	option = spawnStruct();
 	option.text = text;
 	option.description = description;
-	option.function = isDefined(function) ? function : ::empty_function;
+	option.command = isDefined(command) ? command : ::empty_function;
 	option.toggle = isDefined(variable) && variable;
 	option.parameter_1 = parameter_1;
 	option.parameter_2 = parameter_2;
@@ -759,11 +775,11 @@ add_toggle(text, description, function, variable, parameter_1, parameter_2) {
 	self.structure[self.structure.size] = option;
 }
 
-add_array(text, description, function, array, parameter_1, parameter_2) {
+add_array(text, description, command, array, parameter_1, parameter_2) {
 	option = spawnStruct();
 	option.text = text;
 	option.description = description;
-	option.function = isDefined(function) ? function : ::empty_function;
+	option.command = isDefined(command) ? command : ::empty_function;
 	option.array = isDefined(array) && isArray(array) ? array : [];
 	option.parameter_1 = parameter_1;
 	option.parameter_2 = parameter_2;
@@ -771,11 +787,11 @@ add_array(text, description, function, array, parameter_1, parameter_2) {
 	self.structure[self.structure.size] = option;
 }
 
-add_increment(text, description, function, start, minimum, maximum, increment, parameter_1, parameter_2) {
+add_increment(text, description, command, start, minimum, maximum, increment, parameter_1, parameter_2) {
 	option = spawnStruct();
 	option.text = text;
 	option.description = description;
-	option.function = isDefined(function) ? function : ::empty_function;
+	option.command = isDefined(command) ? command : ::empty_function;
 	option.start = isDefined(start) && isNumber(start) ? start : 0;
 	option.minimum = isDefined(minimum) && isNumber(minimum) ? minimum : 0;
 	option.maximum = isDefined(maximum) && isNumber(maximum) ? maximum : 10;
@@ -796,7 +812,7 @@ new_menu(menu) {
 			self.selected_player = player;
 		}
 
-		self.previous[self.previous.size] = self get_menu();;
+		self.previous[self.previous.size] = self get_menu();
 	}
 
 	self set_menu(menu);
@@ -874,10 +890,10 @@ display_option() {
 		menu = self get_menu();
 		cursor = self get_cursor();
 		maximum = min(self.structure.size, self.option_limit);
-		for (a = 0; a < maximum; a++) {
+		for(a = 0; a < maximum; a++) {
 			start = self get_cursor() >= int((self.option_limit / 2)) && self.structure.size > self.option_limit ? (((self get_cursor() + int((self.option_limit / 2))) >= (self.structure.size - 1)) ? (self.structure.size - self.option_limit) : (self get_cursor() - int((self.option_limit / 2)))) : 0;
 			index = (a + start);
-			if(isDefined(self.structure[index].function) && self.structure[index].function == ::new_menu) {
+			if(isDefined(self.structure[index].command) && self.structure[index].command == ::new_menu) {
 				self.menu["submenu"][index] = self create_shader("ui_scrollbar_arrow_right", "TOP_RIGHT", "TOPCENTER", (self.x_offset + (self.menu["cursor"].width - 1)), (self.y_offset + ((a * self.option_spacing) + 20.5)), 7, 7, (cursor == index) ? (0.75, 0.75, 0.75) : (0.5, 0.5, 0.5), 1, 10);
 			}
 
@@ -898,7 +914,7 @@ display_option() {
 				self update_slider(undefined, index);
 			}
 
-			self.menu["text"][index] = self create_text((isDefined(self.structure[index].array) || isDefined(self.structure[index].increment)) ? (self.structure[index].text + ":") : self.structure[index].text, self.font, self.font_scale, "TOP_LEFT", "TOPCENTER", isDefined(self.structure[index].toggle) ? (self.x_offset + 16) : (!isDefined(self.structure[index].function) ? (self.x_offset + (self.menu["cursor"].width / 2)) : (self.x_offset + 4)), (self.y_offset + ((a * self.option_spacing) + 20)), !isDefined(self.structure[index].function) ? self.color_theme : ((cursor == index) ? (0.75, 0.75, 0.75) : (0.5, 0.5, 0.5)), 1, 10);
+			self.menu["text"][index] = self create_text((isDefined(self.structure[index].array) || isDefined(self.structure[index].increment)) ? (self.structure[index].text + ":") : self.structure[index].text, self.font, self.font_scale, "TOP_LEFT", "TOPCENTER", isDefined(self.structure[index].toggle) ? (self.x_offset + 16) : (!isDefined(self.structure[index].command) ? (self.x_offset + (self.menu["cursor"].width / 2)) : (self.x_offset + 4)), (self.y_offset + ((a * self.option_spacing) + 20)), !isDefined(self.structure[index].command) ? self.color_theme : ((cursor == index) ? (0.75, 0.75, 0.75) : (0.5, 0.5, 0.5)), 1, 10);
 		}
 	}
 }
@@ -911,7 +927,7 @@ update_display() {
 }
 
 update_scrolling(scrolling) {
-	if(isDefined(self.structure[self get_cursor()]) && !isDefined(self.structure[self get_cursor()].function)) {
+	if(isDefined(self.structure[self get_cursor()]) && !isDefined(self.structure[self get_cursor()].command)) {
 		self set_cursor((self get_cursor() + scrolling));
 		return self update_scrolling(scrolling);
 	}
@@ -1022,7 +1038,7 @@ menu_option() {
 	switch (menu) {
 		case "Synergy":
 			self add_menu(menu, menu.size);
-			
+
 			self add_option("Basic Options", undefined, ::new_menu, "Basic Options");
 			self add_option("Fun Options", undefined, ::new_menu, "Fun Options");
 			self add_option("Weapon Options", undefined, ::new_menu, "Weapon Options");
@@ -1032,116 +1048,116 @@ menu_option() {
 			self add_option("Map Options", undefined, ::new_menu, "Map Options");
 			self add_option("Bot Options", undefined, ::new_menu, "Bot Options");
 			self add_option("All Players", undefined, ::new_menu, "All Players");
-			
+
 			break;
 		case "Basic Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_toggle("God Mode", "Makes you Invincible", ::god_mode, self.god_mode);
 			self add_toggle("Frag No Clip", "Fly through the Map using (^3[{+frag}]^7)", ::frag_no_clip, self.frag_no_clip);
 			self add_toggle("Infinite Ammo", "Gives you Infinite Ammo and Infinite Grenades", ::infinite_ammo, self.infinite_ammo);
-			
+
 			self add_toggle("Rapid Fire", "Shoot Very Fast (Hold ^3[{+reload}]^7 & ^3[{+attack}])", ::rapid_fire, self.rapid_fire);
 			self add_toggle("No Recoil", "No Recoil while ADS & Firing", ::no_recoil, self.no_recoil);
 			self add_toggle("No Spread", "No Bullet Spread while Hip-firing", ::no_spread, self.no_spread);
-			
+
 			self add_option("Give Perks", undefined, ::new_menu, "Give Perks");
 			self add_option("Take Perks", undefined, ::new_menu, "Take Perks");
-			
+
 			break;
 		case "Fun Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_toggle("Fullbright", "Removes all Shadows and Lighting", ::fullbright, self.fullbright);
 			self add_toggle("Third Person", undefined, ::third_person, self.third_person);
-			
+
 			self add_toggle("Super Jump", undefined, ::super_jump, self.super_jump);
-			
+
 			self add_increment("Set Speed", undefined, ::set_speed, 190, 190, 990, 50);
 			self add_increment("Set Timescale", undefined, ::set_timescale, 1, 1, 10, 1);
-			
+
 			self add_option("Visions", undefined, ::new_menu, "Visions");
-			
+
 			self add_option("Suicide", undefined, ::commit_suicide, self);
-			
+
 			break;
 		case "Weapon Options":
 			self add_menu(menu, menu.size);
-			
+
 			category = get_category(getBaseWeaponName(self getCurrentWeapon()) + "_mp");
-			
+
 			self add_option("Give Weapons", undefined, ::new_menu, "Give Weapons");
-			
+
 			if(category != "launchers" && category != "equipment") {
 				self add_option("Attachments", undefined, ::new_menu, "Attachments");
 			}
-			
+
 			self add_option("Take Current Weapon", undefined, ::take_weapon);
 			self add_option("Drop Current Weapon", undefined, ::drop_weapon);
-			
+
 			self add_option("Bullet Magic", undefined, ::new_menu, "Bullet Magic");
-			
+
 			break;
 		case "Give Killstreaks":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["killstreaks"][1].size; i++) {
 				self add_option(self.syn["killstreaks"][1][i], undefined, ::give_killstreak, self.syn["killstreaks"][0][i]);
 			}
-			
+
 			break;
 		case "Account Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_option("Rainbow Classes", "Set Rainbow Class Names", ::set_colored_classes);
-			
+
 			self add_increment("Set Prestige", undefined, ::set_prestige, 0, 0, 10, 1);
-			
+
 			if(isDefined(self.set_10th_prestige)) {
 				self add_increment("Set Level", undefined, ::set_rank, 0, 0, 1000, 10);
 			} else {
 				self add_increment("Set Level", undefined, ::set_rank, 0, 0, 70, 1);
 			}
-			
+
 			self add_option("Unlock All", undefined, ::set_challenges);
-			
+
 			break;
 		case "Menu Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_increment("Move Menu X", "Move the Menu around Horizontally", ::modify_menu_position, 0, -600, 20, 10, "x");
 			self add_increment("Move Menu Y", "Move the Menu around Vertically", ::modify_menu_position, 0, -150, 30, 10, "y");
-			
+
 			self add_option("Rainbow Menu", "Set the Menu Outline Color to Cycling Rainbow", ::set_menu_rainbow);
-			
+
 			self add_increment("Red", "Set the Red Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Red");
 			self add_increment("Green", "Set the Green Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Green");
 			self add_increment("Blue", "Set the Blue Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Blue");
-			
+
 			self add_toggle("Watermark", "Enable/Disable Watermark in the Top Left Corner", ::watermark, self.watermark);
 			self add_toggle("Hide UI", undefined, ::hide_ui, self.hide_ui);
 			self add_toggle("Hide Weapon", undefined, ::hide_weapon, self.hide_weapon);
-			
+
 			break;
 		case "Map Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_option("Change Map", undefined, ::new_menu, "Change Map");
 			self add_toggle("No Fog", "Removes all Fog", ::no_fog, self.no_fog);
 			self add_option("End Game", undefined, ::end_game);
-			
+
 			break;
 		case "Change Map":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["maps"][0].size; i++) {
 				self add_option(self.syn["maps"][1][i], undefined, ::change_map, self.syn["maps"][0][i], i);
 			}
-			
+
 			for(i = 0; i < self.syn["maps"][2].size; i++) {
 				self add_option(self.syn["maps"][3][i], undefined, ::change_map, self.syn["maps"][2][i], i);
 			}
-			
+
 			for(i = 0; i < self.syn["maps"][4].size; i++) {
 				self add_option(self.syn["maps"][5][i], undefined, ::change_map, self.syn["maps"][4][i], i);
 			}
@@ -1149,13 +1165,13 @@ menu_option() {
 			break;
 		case "Bot Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_array("Set Difficulty", undefined, ::set_difficulty, ["Recruit", "Regular", "Hardened", "Veteran"]);
-			
+
 			self add_option("Spawn Friendly Bot", undefined, ::spawn_friendly_bot);
 			self add_option("Spawn Enemy Bot", undefined, ::spawn_enemy_bot);
 			self add_option("Kick Random Bot", undefined, ::kick_random_bot);
-			
+
 			break;
 		case "All Players":
 			self add_menu(menu, menu.size);
@@ -1163,7 +1179,7 @@ menu_option() {
 			foreach(player in level.players){
 				self add_option(player.name, undefined, ::new_menu, "Player Option", player);
 			}
-			
+
 			break;
 		case "Player Option":
 			self add_menu(menu, menu.size);
@@ -1179,7 +1195,7 @@ menu_option() {
 			if(isDefined(target)) {
 				self add_option("Print", "Print Player Name", ::iPrintString, target);
 				self add_option("Kill", "Kill the Player", ::commit_suicide, target);
-				
+
 				if(isBot(target)) {
 					self add_option("Get Difficulty", undefined, ::get_difficulty, target);
 				}
@@ -1189,19 +1205,19 @@ menu_option() {
 			} else {
 				self add_option("Player not found");
 			}
-			
+
 			break;
 		case "Bullet Magic":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["bullets"][0].size; i++) {
 				self add_toggle(self.syn["bullets"][1][i], undefined, ::modify_bullet, self.bullet[i], self.syn["bullets"][0][i], i);
 			}
-			
+
 			break;
 		case "Visions":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["visions"][0].size; i++) {
 				self add_option(self.syn["visions"][0][i], undefined, ::set_vision, self.syn["visions"][1][i]);
 			}
@@ -1209,7 +1225,7 @@ menu_option() {
 			break;
 		case "Give Perks":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["perks"][2].size; i++) {
 				self add_option(self.syn["perks"][3][i], undefined, ::give_perk, self.syn["perks"][0][i], self.syn["perks"][2][i]);
 			}
@@ -1217,7 +1233,7 @@ menu_option() {
 			break;
 		case "Take Perks":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["perks"][2].size; i++) {
 				self add_option(self.syn["perks"][3][i], undefined, ::take_perk, self.syn["perks"][0][i], self.syn["perks"][2][i]);
 			}
@@ -1225,31 +1241,31 @@ menu_option() {
 			break;
 		case "Give Weapons":
 			self add_menu(menu, menu.size);
-			
+
 			for(i = 0; i < self.syn["weapons"]["category"][1].size; i++) {
 				self add_option(self.syn["weapons"]["category"][1][i], undefined, ::new_menu, self.syn["weapons"]["category"][1][i]);
 			}
-			
+
 			break;
 		case "Attachments":
 			self add_menu(menu, menu.size);
-			
+
 			weapon_name = getBaseWeaponName(self getCurrentWeapon());
 			category = get_category(getBaseWeaponName(self getCurrentWeapon()) + "_mp");
-			
+
 			if(category != "launchers" && category != "melee" && category != "equipment") {
 				self add_option("Equip Attachment", undefined, ::new_menu, "Equip Attachment");
 			}
 			if(category != "launchers" && category != "equipment") {
 				self add_option("Equip Camo", undefined, ::new_menu, "Equip Camo");
 			}
-			
+
 			break;
 		case "Equip Attachment":
 			self add_menu(menu, menu.size);
-			
+
 			weapon_name = getBaseWeaponName(self getCurrentWeapon());
-		
+
 			if(weapon_name == "h2_ranger" || weapon_name == "h2_model1887") {
 				category = "shotguns_alt";
 			} else if(weapon_name == "h2_ksg") {
@@ -1261,118 +1277,118 @@ menu_option() {
 			} else {
 				category = get_category(weapon_name + "_mp");
 			}
-			
+
 			for(i = 0; i < self.syn["weapons"][category]["attachments"][0].size; i++) {
 				self add_option(self.syn["weapons"][category]["attachments"][1][i], undefined, ::equip_attachment, self.syn["weapons"][category]["attachments"][0][i], category);
 			}
-			
+
 			break;
 		case "Equip Camo":
 			self add_menu(menu, menu.size);
-			
+
 			self add_increment("Equip Camo", undefined, ::equip_camo, 1, 1, 45, 1);
 			self add_toggle("Cycle Camos", undefined, ::cycle_camos, self.cycle_camos);
-			
+
 			break;
 		case "Assault Rifles":
 			self add_menu(menu, menu.size);
-			
+
 			category = "assault_rifles";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Sub Machine Guns":
 			self add_menu(menu, menu.size);
-			
+
 			category = "sub_machine_guns";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Sniper Rifles":
 			self add_menu(menu, menu.size);
-			
+
 			category = "sniper_rifles";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Light Machine Guns":
 			self add_menu(menu, menu.size);
-			
+
 			category = "light_machine_guns";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Machine Pistols":
 			self add_menu(menu, menu.size);
-			
+
 			category = "machine_pistols";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Shotguns":
 			self add_menu(menu, menu.size);
-			
+
 			category = "shotguns";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Pistols":
 			self add_menu(menu, menu.size);
-			
+
 			category = "pistols";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Launchers":
 			self add_menu(menu, menu.size);
-			
+
 			category = "launchers";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Melee Weapons":
 			self add_menu(menu, menu.size);
-			
+
 			category = "melee";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_base_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		case "Equipment":
 			self add_menu(menu, menu.size);
-			
+
 			category = "equipment";
-			
+
 			for(i = 0; i < self.syn["weapons"][category][0].size; i++) {
 				self add_option(self.syn["weapons"][category][1][i], undefined, ::give_weapon, self.syn["weapons"][category][0][i]);
 			}
-			
+
 			break;
 		default:
 			if(!isDefined(self.selected_player)) {
@@ -1421,7 +1437,7 @@ close_controls_menu() {
 		self.controls["border"] destroy();
 		self.controls["background"] destroy();
 		self.controls["foreground"] destroy();
-		
+
 		self.controls["text"][0] destroy();
 		self.controls["text"][1] destroy();
 		self.controls["text"][2] destroy();
@@ -1431,7 +1447,7 @@ close_controls_menu() {
 
 iPrintString(string) {
 	if(!isDefined(self.syn["string"])) {
-		self.syn["string"] = self create_text(string, "default", 1, "center", "top", 0, -100, (1,1,1), 1, 9999, false);
+		self.syn["string"] = self create_text(string, "default", 1, "center", "top", 0, -100, (1, 1, 1), 1, 9999, false);
 	} else {
 		self.syn["string"] set_text(string);
 	}
@@ -1439,7 +1455,7 @@ iPrintString(string) {
 	self.syn["string"].alpha = 1;
 	self.syn["string"].glowalpha = 0.2;
 	self.syn["string"] setText(string);
-	self.syn["string"] thread fade_hud(0, 4);
+	self.syn["string"] thread fade_hud(0, 2.5);
 }
 
 fade_hud(alpha, time) {
@@ -1468,16 +1484,6 @@ return_false() {
 	return false;
 }
 
-player_damage_callback(inflictor, attacker, damage, flags, death_reason, weapon, point, direction, hit_location, time_offset) {
-	self endon("disconnect");
-
-	if(isDefined(self.god_mode) && self.god_mode) {
-		return;
-	}
-
-	[[level.OriginalCallbackPlayerDamage]](inflictor, attacker, damage, flags, death_reason, weapon, point, direction, hit_location, time_offset);
-}
-
 // Menu Options
 
 modify_menu_position(offset, axis) {
@@ -1487,7 +1493,7 @@ modify_menu_position(offset, axis) {
 		self.y_offset = 160 + offset;
 	}
 	self close_menu();
-	open_menu("Menu Options");
+	self open_menu();
 	self.menu["title"].x = 264.2;
 }
 
@@ -1495,7 +1501,7 @@ set_menu_rainbow() {
 	if(!isString(self.color_theme)) {
 		self.color_theme = "rainbow";
 		self close_menu();
-		open_menu("Menu Options");
+		self open_menu();
 		self.menu["title"].x = 264.2;
 	}
 }
@@ -1515,7 +1521,7 @@ set_menu_color(value, color) {
 	}
 	self.color_theme = (self.menu_color_red / 255, self.menu_color_green / 255, self.menu_color_blue / 255);
 	self close_menu();
-	open_menu("Menu Options");
+	self open_menu();
 	self.menu["title"].x = 264.2;
 }
 
@@ -1524,11 +1530,14 @@ watermark() {
 	if(self.watermark) {
 		iPrintString("Watermark [^2ON^7]");
 		if(!isDefined(self.syn["watermark"])) {
-			self.syn["watermark"] = self create_text("SyndiShanX", self.font, 1, "TOP_LEFT", "TOPCENTER", 350, -25, "rainbow", 1, 3);
+			self.syn["watermark"] = self create_text("SyndiShanX", self.font, 1, "TOP_LEFT", "TOPCENTER", -425, 10, self.color_theme, 1, 3);
+		} else {
+			self.syn["watermark"].alpha = 1;
+			self.syn["watermark"].color = self.color_theme;
 		}
 	} else {
 		iPrintString("Watermark [^1OFF^7]");
-		self.syn["watermark"] destroy();
+		self.syn["watermark"].alpha = 0;
 	}
 }
 
@@ -1557,6 +1566,7 @@ god_mode() {
 
 frag_no_clip() {
 	self endon("disconnect");
+
 	self endon("game_ended");
 
 	if(!isDefined(self.frag_no_clip)) {
@@ -1578,6 +1588,7 @@ frag_no_clip() {
 
 frag_no_clip_loop() {
 	self endon("disconnect");
+
 	self endon("noclip_end");
 	self disableWeapons();
 	self disableOffHandWeapons();
@@ -1635,16 +1646,16 @@ infinite_ammo() {
 infinite_ammo_loop() {
 	self endon("stop_infinite_ammo");
 	self endon("game_ended");
-	
+
 	for(;;) {
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999);
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "left");
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "right");
-		
+
 		self setWeaponAmmoStock(self getCurrentWeapon(), 999);
 		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "left");
 		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "right");
-		
+
 		wait 1;
 	}
 }
@@ -1827,7 +1838,7 @@ give_base_weapon(weapon) {
 		if(self getWeaponsListPrimaries().size >= max_weapon_num) {
 			self take_weapon(self getCurrentWeapon());
 		}
-		
+
 		iPrintString(weapon);
 		self give_weapon(weapon);
 	}
@@ -1837,13 +1848,13 @@ equip_attachment(attachment, category) {
 	weapon = getBaseWeaponName(self getCurrentWeapon()) + "_mp";
 	weapon_split = strtok(self getCurrentWeapon(), "_");
 	weapon_camo = undefined;
-	
+
 	for(i = 3; i < weapon_split.size; i++) {
 		if(issubstr(weapon_split[i], "camo")) {
 			weapon_camo = "_" + weapon_split[i];
 		}
 	}
-	
+
 	if(!isDefined(weapon_camo)) {
 		weapon_camo = "";
 	}
@@ -1876,7 +1887,7 @@ equip_camo(camo) {
 	weapon = getBaseWeaponName(self getCurrentWeapon()) + "_mp";
 	weapon_split = strtok(self getCurrentWeapon(), "_");
 	weapon_attachment = undefined;
-	
+
 	for(i = 3; i < weapon_split.size; i++) {
 		if(array_contains(self.syn["weapons"]["attachments"], weapon_split[i])) {
 			weapon_attachment = "_" + weapon_split[i];
@@ -1884,19 +1895,19 @@ equip_camo(camo) {
 			weapon_attachment = "_gl_glpre";
 		}
 	}
-	
+
 	if(!isDefined(weapon_attachment)) {
 		weapon_attachment = "";
 	}
-	
+
 	iPrintString(weapon_attachment);
-	
+
 	if(camo < 10) {
 		camo = "00" + camo;
 	} else if(int(camo) > 9 && int(camo) < 100) {
 		camo = "0" + camo;
 	}
-	
+
 	weapon_painted = weapon + weapon_attachment + "_camo" + camo;
 	if(check_weapons(weapon_painted)) {
 		self take_weapon(self getCurrentWeapon());
@@ -1921,7 +1932,7 @@ cycle_camos() {
 cycle_camos_loop() {
 	self endon("stop_cycle_camos");
 	self endon("game_ended");
-	
+
 	for(;;) {
 		for(i = 1; i <= 45; i++) {
 			equip_camo(i);
@@ -1941,12 +1952,12 @@ drop_weapon() {
 	self switchToWeapon(self getWeaponsListPrimaries()[0]);
 }
 
-modify_bullet(bullet, i) { 
+modify_bullet(bullet, i) {
 	self.bullet[i] = !return_toggle(self.bullet[i]);
 	if(self.bullet[i]) {
 		iPrintString(self.syn["bullets"][1][i] + " [^2ON^7]");
 		self thread modify_bullet_loop(bullet);
-	} else { 
+	} else {
 		iPrintString(self.syn["bullets"][1][i] + " [^1OFF^7]");
 		self notify("stop_modify_bullet_loop");
 	}
@@ -1954,10 +1965,11 @@ modify_bullet(bullet, i) {
 
 modify_bullet_loop(bullet) {
 	self endon("disconnect");
+
 	self endon("stop_modify_bullet_loop");
 
-	for(;;) { 
-		self waitTill("weapon_fired");
+	for(;;) {
+		self waittill("weapon_fired");
 
 		start = self getEye();
 		end = vectorScale(anglesToForward(self getPlayerAngles()), 9999);
@@ -2001,13 +2013,14 @@ update_status(element, text) {
 
 set_challenges() { // Retropack
 	self endon("disconnect");
+
 	self endon("death");
 	self.god_mode = true;
 	chalProgress = 0;
 	progress_bar = self create_shader("white", "top_left", "center", 0, -100, 1, 10, self.color_theme, 1, 9999);
 	progress_outline = self create_shader("white", "center", "top", 0, -105, 132, 37, self.color_theme, 1, 1);
 	progress_background = self create_shader("white", "center", "top", 0, -105, 130, 35, (0.075, 0.075, 0.075), 1, 2);
-	progress_text = self create_text("Unlocking All", "default", 1, "center", "top", 0, -115, (1,1,1), 1, 9999, true);
+	progress_text = self create_text("Unlocking All", "default", 1, "center", "top", 0, -115, (1, 1, 1), 1, 9999, true);
 	self thread update_status(progress_text, "Unlocking All");
 	if(self in_menu()) {
 		self close_menu();
@@ -2015,7 +2028,7 @@ set_challenges() { // Retropack
 	foreach(challengeRef, challengeData in level.challengeInfo) {
 		finalTarget = 0;
 		finalTier = 0;
-		for (tierId = 1; isDefined(challengeData["targetval"][tierId]); tierId++) {
+		for(tierId = 1; isDefined(challengeData["targetval"][tierId]); tierId++) {
 			finalTarget = challengeData["targetval"][tierId];
 			finalTier = tierId + 1;
 		}
@@ -2043,7 +2056,7 @@ set_rank(value) {
 	if(value != 0) {
 		value--;
 	}
-	
+
 	if(value == 999) {
 		rank_xp = 2516000 + (81300 * (value - 69));
 	} else if(value > 69) {
@@ -2053,7 +2066,7 @@ set_rank(value) {
 	} else {
 		rank_xp = int(tableLookup("mp/rankTable.csv", 0, value, (value == int(tableLookup("mp/rankTable.csv", 0, "maxrank", 1))) ? 7 : 2));
 	}
-	
+
 	self maps\mp\gametypes\_rank::giverankxp(undefined, rank_xp, undefined, undefined, false);
 	self maps\mp\gametypes\_persistence::statset("experience", rank_xp);
 	iPrintString(self.name + "'s Level set to " + (value + 1));
@@ -2065,7 +2078,7 @@ set_prestige(value) {
 	} else {
 		self.set_10th_prestige = undefined;
 	}
-	
+
 	self maps\mp\gametypes\_persistence::statset("prestige", value);
 	iPrintString(self.name + "'s Prestige set to " + value);
 }
@@ -2148,14 +2161,14 @@ _spawn_bot(count, team, callback, notifyWhendone, difficulty) { // Retropack
 	while (connectedComplete < connectingArray.size && getTime() < time) {
 		connectedComplete = 0;
 		foreach(connecting in connectingArray) {
-			if (connecting.ready || connecting.abort) {
+			if(connecting.ready || connecting.abort) {
 				connectedComplete++;
 			}
 		}
 		wait 0.05;
 	}
 
-	if (isDefined(notifyWhendone)) {
+	if(isDefined(notifyWhendone)) {
 		self notify(notifyWhendone);
 	}
 }
