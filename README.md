@@ -11,9 +11,9 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 ### Requirements: [HorizonMW](https://horizonmw.org/)
 
 #### Installation:
-* Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc) and [patches.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/patches.gsc)
-
 * Download the [After Patch DLL](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/After-Patch-GSC.dll) and Inject it using [Process Hacker 2](https://sourceforge.net/projects/processhacker/files/processhacker2/processhacker-2.39-setup.exe/download)
+
+* Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc) and [patches.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/patches.gsc)
 
 * Place them into `hmw-mod/scripts/mp`, then Load into a Private Match and Enjoy
 
