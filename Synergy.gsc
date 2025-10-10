@@ -396,7 +396,7 @@ create_rainbow_color() {
 		}
 
 		level.rainbow_color = (r/255, g/255, b/255);
-		wait .05;
+		wait 0.05;
 	}
 }
 
@@ -406,7 +406,7 @@ start_rainbow() {
 	while(isDefined(self)) {
 		self fadeOverTime(.05);
 		self.color = level.rainbow_color;
-		wait .05;
+		wait 0.05;
 	}
 }
 
@@ -704,7 +704,7 @@ is_locked() {
 
 empty_option() {
 	option = ["Nothing To See Here!", "Quiet Here, Isn't It?", "Oops, Nothing Here Yet!", "Bit Empty, Don't You Think?"];
-	return option[randomInt(option.size)];
+	return option[randomint(option.size)];
 }
 
 empty_function() {}
@@ -1091,7 +1091,7 @@ menu_option() {
 			self add_option("Take Current Weapon", undefined, ::take_weapon);
 			self add_option("Drop Current Weapon", undefined, ::drop_weapon);
 
-			self add_option("Bullet Magic", undefined, ::new_menu, "Bullet Magic");
+			self add_option("Magic Bullets", undefined, ::new_menu, "Magic Bullets");
 
 			break;
 		case "Give Killstreaks":
@@ -1203,7 +1203,7 @@ menu_option() {
 			}
 
 			break;
-		case "Bullet Magic":
+		case "Magic Bullets":
 			self add_menu(menu, menu.size);
 
 			for(i = 0; i < self.syn["bullets"][0].size; i++) {
@@ -1559,7 +1559,6 @@ god_mode() {
 
 frag_no_clip() {
 	self endon("disconnect");
-
 	self endon("game_ended");
 
 	if(!isDefined(self.frag_no_clip)) {
@@ -1571,7 +1570,7 @@ frag_no_clip() {
 					self thread frag_no_clip_loop();
 				}
 			}
-			wait .05;
+			wait 0.05;
 		}
 	} else {
 		self.frag_no_clip = undefined;
@@ -1581,8 +1580,8 @@ frag_no_clip() {
 
 frag_no_clip_loop() {
 	self endon("disconnect");
-
 	self endon("noclip_end");
+
 	self disableWeapons();
 	self disableOffHandWeapons();
 	self.frag_no_clip_loop = true;
@@ -1606,7 +1605,7 @@ frag_no_clip_loop() {
 		if(self meleeButtonPressed()) {
 			break;
 		}
-		wait .05;
+		wait 0.05;
 	}
 
 	clip delete();
@@ -1691,11 +1690,11 @@ fullbright() {
 	if(self.fullbright) {
 		iPrintString("Fullbright [^2ON^7]");
 		setDvar("r_fullbright", 1);
-		wait .01;
+		wait 0.01;
 	} else {
 		iPrintString("Fullbright [^1OFF^7]");
 		setDvar("r_fullbright", 0);
-		wait .01;
+		wait 0.01;
 	}
 }
 
@@ -1739,7 +1738,7 @@ super_jump() {
 
 set_vision(vision) {
 	self visionSetNakedForPlayer("", 0.1);
-	wait .25;
+	wait 0.25;
 	self visionSetNakedForPlayer(vision, 0.1);
 }
 
@@ -1922,7 +1921,7 @@ cycle_camos_loop() {
 		for(i = 1; i <= 45; i++) {
 			equip_camo(i);
 			iPrintString(i);
-			wait .2;
+			wait 0.2;
 		}
 	}
 }
@@ -1949,9 +1948,8 @@ modify_bullet(bullet, i) {
 }
 
 modify_bullet_loop(bullet) {
-	self endon("disconnect");
-
 	self endon("stop_modify_bullet_loop");
+	self endon("disconnect");
 
 	for(;;) {
 		self waittill("weapon_fired");
@@ -1992,14 +1990,14 @@ update_status(element, text) {
 			status = text + "...";
 			element setText(status);
 		}
-		wait .5;
+		wait 0.5;
 	}
 }
 
 set_challenges() { // Retropack
 	self endon("disconnect");
-
 	self endon("death");
+
 	self.god_mode = true;
 	chalProgress = 0;
 	progress_bar = self create_shader("white", "top_left", "center", 0, -100, 1, 10, self.color_theme, 1, 9999);
