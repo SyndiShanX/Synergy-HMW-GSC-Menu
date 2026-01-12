@@ -1,4 +1,7 @@
-# Synergy HMW GSC Menu
+> [!CAUTION]
+> # Currently not Working
+
+## Synergy HMW GSC Menu
 
 HorizonMW GSC Mod Menu
 
