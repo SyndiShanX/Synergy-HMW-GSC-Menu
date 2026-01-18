@@ -1,6 +1,3 @@
-> [!CAUTION]
-> # Currently not Working
-
 ## Synergy HMW GSC Menu
 
 HorizonMW GSC Mod Menu
@@ -14,13 +11,29 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 ### Requirements: [HorizonMW](https://horizonmw.org/)
 
 #### Installation:
-* Download the [After Patch DLL](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/After-Patch-GSC.dll) and Inject it using [Process Hacker 2](https://sourceforge.net/projects/processhacker/files/processhacker2/processhacker-2.39-setup.exe/download)
+In order to use this menu you have to host a Dedicated Server
 
-* Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc) and [patches.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/patches.gsc)
+* Make a copy of your HMW Installation (Using your existing installation won't work due to the Client not allowing Custom Scripts)
 
-* Place them into `hmw-mod/scripts/mp`, then Load into a Private Match and Enjoy
+* Download the [Server Files](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Server_Files.zip), extract and place the files in that new installation folder (Next to `hmw-mod.exe`)
 
-* If you aren't the Host of the Game the Menu won't work
+* You can change the Server Settings in `main/server_default.cfg` at the bottom if you want to change the maps/modes
+
+* Run `server_default.bat` and wait for the Server to Start
+
+* Launch your Game, and Connect using `connect 127.0.0.1:27017` in the ingame console (Tilde Key (~), to the left of 1 on your keyboard)
+
+* Any Player that joins wil have the Menu
+
+#### Optional File Deletion:
+
+You can delete the following files in your server installation to save some space:
+ - Any file ending in `.pak`
+ - Any `.dll` file except `amd_ags_x64.dll`, `bink2w64.dll`, and `steam_api64.dll`
+ - Any folder besides `hmw-mod`, `hmw-usermaps`, `main`, `user_scripts`, and `zone`
+ - All `.ff` in `zone` files starting with `mp_head`, `mp_lm`, `mp_shirt`, `mp_vm`, `mp_wm`, and `mp_viewarm`
+ 
+You can use `move_extra_files.bat` to move them into `EXTRA_FILES` so you can see what was moved and just delete that
 
 ## Credits
 
@@ -33,5 +46,3 @@ This menu is based on [M203](https://github.com/Xeirh/M203) by [Xeirh](https://g
   * `Joel` Suggestions
 	
 Some functions are from [Retropack](https://github.com/justinabellera/retro-pack) by [Rtros](https://github.com/justinabellera)
-
-The [After Patch DLL](https://www.unknowncheats.me/forum/call-of-duty-4-modern-warfare/709370-patch-fix-please-remove-name-gsc-scripts-folder.html) was made by [EFKMODZ](https://www.unknowncheats.me/forum/members/2263667.html)

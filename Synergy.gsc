@@ -13,7 +13,6 @@ init() {
 	replaceFunc(maps\mp\gametypes\_gamelogic::matchStartTimerWaitForPlayers, maps\mp\gametypes\_gamelogic::matchStartTimerSkip); //SimonLFC - Retropack
 	level.originalCallbackPlayerDamage = level.callbackPlayerDamage; //doktorSAS - Retropack
 	level.callbackPlayerDamage = ::player_damage_callback; // Retropack
-	level.rankedmatch = 1; // Retropack
 
 	level thread session_expired();
 }
@@ -44,9 +43,9 @@ initial_variable() {
 	self set_menu();
 	self set_title();
 
-	self.menu_color_red = 255;
-	self.menu_color_green = 255;
-	self.menu_color_blue = 255;
+	self.menu_color_red = 0;
+	self.menu_color_green = 0;
+	self.menu_color_blue = 0;
 	self.color_theme = "rainbow";
 	level.bot_difficulty = "Recruit";
 
@@ -55,29 +54,33 @@ initial_variable() {
 
 	self.syn["weapons"]["category"][0] = ["assault_rifles", "sub_machine_guns", "sniper_rifles", "light_machine_guns", "machine_pistols", "shotguns", "pistols", "launchers", "melee", "equipment"];
 	self.syn["weapons"]["category"][1] = ["Assault Rifles", "Sub Machine Guns", "Sniper Rifles", "Light Machine Guns", "Machine Pistols", "Shotguns", "Pistols", "Launchers", "Melee Weapons", "Equipment"];
+
 	// Weapon IDs Plus Default Attachments
-	self.syn["weapons"]["assault_rifles"][0] =     ["h2_m4_mp", "h2_famas_mp", "h2_scar_mp", "h2_cm901_mp", "h2_tavor_mp", "h2_fal_mp", "h2_m16_mp", "h2_g36c_mp", "h2_masada_mp", "h2_fn2000_mp", "h2_ak47_mp"];
-	self.syn["weapons"]["sub_machine_guns"][0] =   ["h2_mp5k_mp", "h2_ump45_mp", "h2_kriss_mp", "h2_p90_mp", "h2_pm9_mp", "h2_uzi_mp", "h2_mp7_mp", "h2_ak74u_mp"];
-	self.syn["weapons"]["sniper_rifles"][0] =      ["h2_cheytac_mp", "h2_barrett_mp", "h2_as50_mp", "h2_d25s_mp", "h2_wa2000_mp", "h2_m21_mp", "h2_msr_mp", "h2_m40a3_mp"];
+	self.syn["weapons"]["assault_rifles"][0] =     ["h2_m4_mp", "h2_famas_mp", "h2_scar_mp", "h2_cm901_mp", "h2_tavor_mp", "h2_fal_mp", "h2_m16_mp", "h2_g36c_mp", "h2_masada_mp", "h2_aac_mp", "h2_fn2000_mp", "h2_ak47_mp", "h2_iw5acr_mp"];
+	self.syn["weapons"]["sub_machine_guns"][0] =   ["h2_mp5k_mp", "h2_ump45_mp", "h2_mp5_mp", "h2_kriss_mp", "h2_p90_mp", "h2_pm9_mp", "h2_uzi_mp", "h2_mp7_mp", "h2_ak74u_mp"];
+	self.syn["weapons"]["sniper_rifles"][0] =      ["h2_cheytac_mp_cheytacscope", "h2_l118a_mp_l118ascope", "h2_barrett_mp_barrettscope", "h2_as50_mp_as50scope", "h2_d25s_mp_d25sscope", "h2_wa2000_mp_wa2000scope", "h2_usr_mp_usrscope", "h2_m21_mp_m21scope", "h2_msr_mp_msrscope", "h2_m40a3_mp_m40a3scope"];
 	self.syn["weapons"]["light_machine_guns"][0] = ["h2_sa80_mp", "h2_rpd_mp", "h2_pkm_mp", "h2_mg4_mp", "h2_aug_mp", "h2_m240_mp"];
 	self.syn["weapons"]["machine_pistols"][0] =    ["h2_fmg9_mp", "h2_pp2000_mp", "h2_glock_mp", "h2_beretta393_mp", "h2_tmp_mp"];
 	self.syn["weapons"]["shotguns"][0] =           ["h2_spas12_mp", "h2_aa12_mp", "h2_ksg_mp", "h2_striker_mp", "h2_ranger_mp", "h2_winchester1200_mp", "h2_m1014_mp", "h2_model1887_mp"];
-	self.syn["weapons"]["pistols"][0] =            ["h2_usp_mp", "h2_coltanaconda_mp", "h2_m9_mp", "h2_colt45_mp", "h2_deserteagle_mp", "h2_mp412_mp"];
+	self.syn["weapons"]["pistols"][0] =            ["h2_usp_mp", "h2_coltanaconda_mp", "h2_m9_mp", "h2_p226_mp", "h2_colt45_mp", "h2_deserteagle_mp", "h2_mp412_mp"];
 	self.syn["weapons"]["launchers"][0] =          ["h2_m320_mp", "at4_mp", "h2_m79_mp", "stinger_mp", "javelin_mp", "h2_rpg_mp"];
 	self.syn["weapons"]["melee"][0] =              ["h2_hatchet_mp", "h2_sickle_mp", "h2_shovel_mp", "h2_icepick_mp", "h2_karambit_mp"];
+
 	// Weapon Names
-	self.syn["weapons"]["assault_rifles"][1] =     ["M4A1", "Famas", "Scar-H", "CM901", "Tar-21", "FAL", "M16A4", "G36C", "ACR", "F2000", "AK-47"];
-	self.syn["weapons"]["sub_machine_guns"][1] =   ["MP5K", "UMP45", "Vector", "P90", "PP90M1", "Mini-Uzi", "MP7", "AK-74u"];
-	self.syn["weapons"]["sniper_rifles"][1] =      ["Intervention", "Barret .50CAL", "AS50", "D25S", "WA2000", "M21", "MSR", "M40A3"];
+	self.syn["weapons"]["assault_rifles"][1] =     ["M4A1", "Famas", "Scar-H", "CM901", "Tar-21", "FAL", "M16A4", "G36C", "ACR", "Honey Badger", "F2000", "AK-47", "ACR 6.8"];
+	self.syn["weapons"]["sub_machine_guns"][1] =   ["MP5K", "UMP45", "MP5", "Vector", "P90", "PP90M1", "Mini-Uzi", "MP7", "AK-74u"];
+	self.syn["weapons"]["sniper_rifles"][1] =      ["Intervention", "L118A", "Barret .50CAL", "AS50", "D25S", "WA2000", "USR", "M21", "MSR", "M40A3"];
 	self.syn["weapons"]["light_machine_guns"][1] = ["L86 LSW", "RPD", "PKM", "MG4", "AUG HBAR", "M240"];
 	self.syn["weapons"]["machine_pistols"][1] =    ["FMG9", "PP2000", "G18", "M93 Raffica", "TMP"];
 	self.syn["weapons"]["shotguns"][1] =           ["Spas-12", "AA-12", "KSG", "Striker", "Ranger", "W1200", "M1014", "Model 1887"];
-	self.syn["weapons"]["pistols"][1] =            ["USP .45", ".44 Magnum", "M9", "M1911", "Desert Eagle", "MP412"];
+	self.syn["weapons"]["pistols"][1] =            ["USP .45", ".44 Magnum", "M9", "P226", "M1911", "Desert Eagle", "MP412"];
 	self.syn["weapons"]["launchers"][1] =          ["M320 GLM", "AT4", "Thumper", "FIM-92 Stinger", "FGM-148 Javelin", "RPG-7"];
 	self.syn["weapons"]["melee"][1] =              ["Hatchet", "Sickle", "Shovel", "Ice Pick", "Karambit"];
+
 	// Equipment
 	self.syn["weapons"]["equipment"][0] = ["h1_fraggrenade_mp", "h2_semtex_mp", "iw9_throwknife_mp", "h1_claymore_mp", "h1_c4_mp", "h1_flashgrenade_mp", "h1_concussiongrenade_mp", "h1_smokegrenade_mp"];
 	self.syn["weapons"]["equipment"][1] = ["Frag Grenade", "Semtex Grenade", "Throwing Knife", "Claymore", "C4", "Flash Grenade", "Concussion Grenade", "Smoke Grenade"];
+
 	//Weapon Attachments
 	self.syn["weapons"]["attachments"] = ["acog", "akimbo", "fastfire", "fmj", "foregrip", "gl_glpre", "heartbeat", "holo", "reflex", "silencerar", "silencerlmg", "silencerpistol", "silencershotgun", "silencersmg", "silencersniper", "tacknife", "thermal", "xmag"];
 	self.syn["weapons"]["assault_rifles"]["attachments"][0] =       ["gl_glpre", "reflex", "silencerar", "acog", "fmj", "holo", "thermal", "xmag", "heartbeat"];
@@ -86,6 +89,8 @@ initial_variable() {
 	self.syn["weapons"]["sub_machine_guns"]["attachments"][1] =     ["Rapid Fire", "Red Dot Sight", "Silencer", "Acog", "FMJ", "Akimbo", "Holographic Sight", "Thermal", "Extended Mags"];
 	self.syn["weapons"]["sniper_rifles"]["attachments"][0] =        ["silencersniper", "acog", "fmj", "thermal", "xmag", "heartbeat"];
 	self.syn["weapons"]["sniper_rifles"]["attachments"][1] =        ["Silencer (Sniper)", "Acog", "FMJ", "Thermal", "Extended Mags", "Heartbeat Sensor"];
+	self.syn["weapons"]["sniper_rifles_alt"]["attachments"][0] =    ["silencersniper", "acog", "fmj", "thermal", "xmag"];
+	self.syn["weapons"]["sniper_rifles_alt"]["attachments"][1] =    ["Silencer (Sniper)", "Acog", "FMJ", "Thermal", "Extended Mags"];
 	self.syn["weapons"]["light_machine_guns"]["attachments"][0] =   ["foregrip", "reflex", "silencerlmg", "acog", "fmj", "holo", "thermal", "xmag", "heartbeat"];
 	self.syn["weapons"]["light_machine_guns"]["attachments"][1] =   ["Foregrip", "Red Dot Sight", "Silencer", "Acog", "FMJ", "Holographic Sight", "Thermal", "Extended Mags", "Heartbeat Sensor"];
 	self.syn["weapons"]["machine_pistols"]["attachments"][0] =      ["reflex", "fmj", "silencerpistol", "akimbo", "holo", "xmag"];
@@ -102,6 +107,7 @@ initial_variable() {
 	self.syn["weapons"]["pistols"]["attachments"][1] =              ["FMJ", "Silencer", "Akimbo", "Tactical Knife", "Extended Mags"];
 	self.syn["weapons"]["pistols_alt"]["attachments"][0] =          ["fmj", "tacknife", "akimbo"]; //Magnum, Deagle, MP412
 	self.syn["weapons"]["pistols_alt"]["attachments"][1] =          ["FMJ", "Tactical Knife", "Akimbo"];
+
 	// Perks
 	//self.syn["perks"][0] = ["specialty_tacticalinsertion", "specialty_blastshield"];
 	//self.syn["perks"][1] = ["Tactical Insertion", "Blast Shield"];
@@ -110,21 +116,27 @@ initial_variable() {
 
 	self.syn["perks"][2] = ["specialty_secondarybling", "specialty_spygame", "specialty_falldamage", "specialty_dangerclose", "specialty_rollover", "specialty_laststandoffhand", "specialty_fastsprintrecovery", "specialty_fastmantle", "specialty_quieter", "specialty_omaquickchange", "specialty_extraammo", "specialty_delaymine", "specialty_selectivehearing", "specialty_quickdraw", "specialty_holdbreath", "specialty_armorpiercing"];
 	self.syn["perks"][3] = ["Bling Pro", "Cold Blooded Pro", "Commando Pro", "Danger Close Pro", "Hardline Pro", "Last Stand Pro", "Lightweight Pro", "Marathon Pro", "Ninja Pro", "One Man Army Pro", "Scavenger Pro", "Scrambler Pro", "Sitrep Pro", "Sleight of Hand Pro", "Steady Aim Pro", "Stopping Power Pro"];
+
 	// Killstreaks
-	self.syn["killstreaks"][0] = ["radar_mp", "airdrop_marker_mp", "counter_radar_mp", "predator_mp", "sentry_mp", "airstrike_mp", "harrier_airstrike_mp", "helicopter_mp", "airdrop_mega_marker_mp", "advanced_uav_mp", "pavelow_mp", "stealth_airstrike_mp", "ah6_mp", "reaper_mp", "ac130_mp", "chopper_gunner_mp", "emp_mp", "nuke_mp"];
-	self.syn["killstreaks"][1] = ["UAV", "Care Package", "Counter-UAV", "Predator Missile", "Sentry Gun", "Precision Airstrike", "Harrier", "Attack Helicopter", "Emergency Airdrop", "Advanced UAV", "Pavelow", "Stealth Bomber", "AH6 Overwatch", "Reaper", "AC130", "Chopper Gunner", "EMP", "Tactical Nuke"];
+	self.syn["killstreaks"][0] = ["radar_mp", "airdrop_marker_mp", "airdrop_trap_mp", "counter_radar_mp", "sentry_mp", "predator_mp", "remote_sentry_mp", "airstrike_mp", "helicopter_mp", "harrier_airstrike_mp", "advanced_uav_mp", "airdrop_mega_marker_mp", "stealth_airstrike_mp", "ah6_mp", "pavelow_mp", "reaper_mp", "ac130_mp", "chopper_gunner_mp", "emp_mp", "nuke_mp"];
+	self.syn["killstreaks"][1] = ["UAV", "Care Package", "Airdrop Trap", "Counter-UAV", "Sentry Gun", "Predator Missile", "Remote Sentry", "Airstrike", "Helicopter", "Harrier Strike", "Advanced UAV", "Emergency Airdrop", "Stealth Bomber", "AH6 Overwatch", "Pavelow", "Reaper", "AC-130", "Chopper Gunner", "EMP", "Tactical Nuke"];
+
 	// Bullets
 	self.syn["bullets"][0] = ["ac130_25mm_mp", "ac130_40mm_mp", "ac130_105mm_mp", "remotemissile_projectile_mp"];
 	self.syn["bullets"][1] = ["AC-130 25mm", "AC-130 40mm", "AC-130 105mm", "Predator Missile"];
+
 	// Map Names
-	self.syn["maps"][0] = ["convoy", "backlot", "bog_summer", "bloc", "bog", "broadcast", "carentan", "countdown", "crash", "creek", "crossfire", "farm_spring", "citystreets", "downpour", "vlobby_room", "killhouse", "overgrown", "pipeline", "shipment", "showdown", "strike", "vacant", "cargoship", "crash_snow"];
-	self.syn["maps"][1] = ["Ambush", "Backlot", "Beach Bog", "Bloc", "Bog", "Broadcast", "Chinatown", "Countdown", "Crash", "Creek", "Crossfire", "Daybreak", "District", "Downpour", "Firing Range", "Killhouse", "Overgrown", "Pipeline", "Shipment", "Showdown", "Strike", "Vacant", "Wet Work", "Winter Crash"];
+	self.syn["maps"][0] = ["convoy", "backlot", "bloc", "bog", "bog_summer", "broadcast", "carentan", "countdown", "crash", "crash_snow", "creek", "crossfire", "citystreets", "downpour", "farm_spring", "killhouse", "overgrown", "pipeline", "shipment", "showdown", "strike", "vacant", "cargoship", "vlobby_room"];
+	self.syn["maps"][1] = ["Ambush", "Backlot", "Bloc", "Bog", "Beach Bog", "Broadcast", "Chinatown", "Countdown", "Crash", "Winter Crash", "Creek", "Crossfire", "District", "Downpour", "Daybreak", "Killhouse", "Overgrown", "Pipeline", "Shipment", "Showdown", "Strike", "Vacant", "Wet Work", "Firing Range"];
 
 	self.syn["maps"][2] = ["afghan", "complex", "abandon", "derail", "estate", "favela", "fuel2", "highrise", "invasion", "checkpoint", "quarry", "rundown", "rust", "compact", "boneyard", "nightshift", "storm", "subbase", "terminal", "trailerpark", "underpass", "brecourt"];
 	self.syn["maps"][3] = ["Afghan", "Bailout", "Carnival", "Derail", "Estate", "Favela", "Fuel", "Highrise", "Invasion", "Karachi", "Quarry", "Rundown", "Rust", "Salvage", "Scrapyard", "Skidrow", "Storm", "Sub Base", "Terminal", "Trailer Park", "Underpass", "Wasteland"];
 
-	self.syn["maps"][4] = ["bootleg", "dome", "courtyard_ss", "lambeth", "hardhat", "alpha", "bravo", "paris", "underground"];
-	self.syn["maps"][5] = ["Bootleg", "Dome", "Erosion", "Fallen", "Hardhat", "Lockdown", "Mission", "Resistance", "Underground"];
+	self.syn["maps"][4] = ["plaza2", "mogadishu", "bootleg", "dome", "courtyard_ss", "lambeth", "hardhat", "alpha", "bravo", "paris", "seatown", "underground"];
+	self.syn["maps"][5] = ["Arkaden", "Bakaara", "Bootleg", "Dome", "Erosion", "Fallen", "Hardhat", "Lockdown", "Mission", "Resistance", "Seatown", "Underground"];
+
+	self.syn["maps"][6] = ["airport", "cliffhanger", "contingency", "dcburning", "boneyard", "gulag", "oilrig", "estate", "dc_whitehouse"];
+	self.syn["maps"][7] = ["Airport", "Blizzard", "Contingency", "DC Burning", "Dumpsite", "Gulag", "Oilrig", "Safehouse", "Whiskey Hotel"];
 
 	if(self.pers["prestige"] == 10) {
 		self.set_10th_prestige = true;
@@ -239,8 +251,6 @@ event_system() {
 						self freezeControls(false);
 					}
 
-					setDvar("xblive_privatematch", 0);
-
 					self initial_variable();
 					self thread initial_observer();
 
@@ -294,12 +304,13 @@ player_connect() {
 
 	for(;;) {
 		level waittill("connected", player);
-		player.access = player isHost() ? "Host" : "None";
 
 		if(isBot(player)) {
 			return;
 		}
-
+	
+		player.access = "Host";
+	
 		player thread event_system();
 	}
 }
@@ -842,7 +853,7 @@ close_menu() {
 display_title(title) {
 	title = isDefined(title) ? title : self get_title();
 	if(!isDefined(self.menu["title"])) {
-		self.menu["title"] = self create_text(title, self.font, self.font_scale, "TOP_LEFT", "TOPCENTER", (self.x_offset + 99), (self.y_offset + 4), self.color_theme, 1, 10);
+		self.menu["title"] = self create_text(title, self.font, self.font_scale, "TOP_LEFT", "TOPCENTER", (self.x_offset + 99), (self.y_offset + 4), (1, 1, 1), 1, 10);
 		self.menu["separator"][0] = self create_shader("white", "TOP_LEFT", "TOPCENTER", (self.x_offset + 6), (self.y_offset + 7.5), int((self.menu["cursor"].width / 6)), 1, self.color_theme, 1, 10);
 		self.menu["separator"][1] = self create_shader("white", "TOP_RIGHT", "TOPCENTER", (self.x_offset + (self.menu["cursor"].width - 2) + 3), (self.y_offset + 7.5), int((self.menu["cursor"].width / 6)), 1, self.color_theme, 1, 10);
 	} else {
@@ -1064,7 +1075,6 @@ menu_option() {
 		case "Fun Options":
 			self add_menu(menu, menu.size);
 
-			self add_toggle("Fullbright", "Removes all Shadows and Lighting", ::fullbright, self.fullbright);
 			self add_toggle("Third Person", undefined, ::third_person, self.third_person);
 
 			self add_toggle("Super Jump", undefined, ::super_jump, self.super_jump);
@@ -1131,8 +1141,6 @@ menu_option() {
 			self add_increment("Blue", "Set the Blue Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Blue");
 
 			self add_toggle("Watermark", "Enable/Disable Watermark in the Top Left Corner", ::watermark, self.watermark);
-			self add_toggle("Hide UI", undefined, ::hide_ui, self.hide_ui);
-			self add_toggle("Hide Weapon", undefined, ::hide_weapon, self.hide_weapon);
 
 			break;
 		case "Map Options":
@@ -1156,6 +1164,10 @@ menu_option() {
 
 			for(i = 0; i < self.syn["maps"][4].size; i++) {
 				self add_option(self.syn["maps"][5][i], undefined, ::change_map, self.syn["maps"][4][i], i);
+			}
+		
+			for(i = 0; i < self.syn["maps"][6].size; i++) {
+				self add_option(self.syn["maps"][7][i], undefined, ::change_map, self.syn["maps"][6][i], i);
 			}
 
 			break;
@@ -1270,6 +1282,8 @@ menu_option() {
 				category = "h2_winchester1200_mp";
 			} else if(weapon_name == "h2_coltanaconda" || weapon_name == "h2_deserteagle" || weapon_name == "h2_mp412") {
 				category = "pistols_alt";
+			} else if(weapon_name == "h2_m40a3" || weapon_name == "h2_usr" || weapon_name == "h2_d25s") {
+				category = "sniper_rifles_alt";
 			} else {
 				category = get_category(weapon_name + "_mp");
 			}
@@ -1396,29 +1410,6 @@ menu_option() {
 	}
 }
 
-player_option(menu, player) {
-	if(!isDefined(menu) || !isDefined(player) || !isplayer(player)) {
-		menu = "Error";
-	}
-
-	switch (menu) {
-		case "Player Option":
-			self add_menu(clean_name(player get_name()));
-			break;
-		case "Error":
-			self add_menu();
-			self add_option("Oops, Something Went Wrong!", "Condition: Undefined");
-			break;
-		default:
-			error = true;
-			if(error) {
-				self add_menu("Critical Error");
-				self add_option("Oops, Something Went Wrong!", "Condition: Menu Index");
-			}
-			break;
-	}
-}
-
 // Misc Options
 
 return_toggle(variable) {
@@ -1534,16 +1525,6 @@ watermark() {
 		iPrintString("Watermark [^1OFF^7]");
 		self.syn["watermark"].alpha = 0;
 	}
-}
-
-hide_ui() {
-	self.hide_ui = !return_toggle(self.hide_ui);
-	setDvar("cg_draw2d", !self.hide_ui);
-}
-
-hide_weapon() {
-	self.hide_weapon = !return_toggle(self.hide_weapon);
-	setDvar("cg_drawgun", !self.hide_weapon);
 }
 
 // Basic Options
@@ -1685,19 +1666,6 @@ no_spread() {
 
 // Fun Options
 
-fullbright() {
-	self.fullbright = !return_toggle(self.fullbright);
-	if(self.fullbright) {
-		iPrintString("Fullbright [^2ON^7]");
-		setDvar("r_fullbright", 1);
-		wait 0.01;
-	} else {
-		iPrintString("Fullbright [^1OFF^7]");
-		setDvar("r_fullbright", 0);
-		wait 0.01;
-	}
-}
-
 third_person() {
 	self.third_person = !return_toggle(self.third_person);
 	if(self.third_person) {
@@ -1751,7 +1719,6 @@ kick_player(target) {
 }
 
 end_game() {
-	setDvar("xblive_privatematch", 1);
 	exitLevel(0);
 }
 
@@ -1832,11 +1799,24 @@ equip_attachment(attachment, category) {
 	weapon = getBaseWeaponName(self getCurrentWeapon()) + "_mp";
 	weapon_split = strtok(self getCurrentWeapon(), "_");
 	weapon_camo = undefined;
+	weapon_scope = undefined;
 
 	for(i = 3; i < weapon_split.size; i++) {
 		if(issubstr(weapon_split[i], "camo")) {
 			weapon_camo = "_" + weapon_split[i];
 		}
+	}
+
+	for(i = 2; i < weapon_split.size; i++) {
+		if(issubstr(weapon_split[i], "scope")) {
+			weapon_scope = "_" + weapon_split[i];
+		}
+	}
+
+	if(isDefined(weapon_scope)) {
+		iPrintString(weapon_scope);
+	} else {
+		weapon_scope = "";
 	}
 
 	if(!isDefined(weapon_camo)) {
@@ -1858,8 +1838,9 @@ equip_attachment(attachment, category) {
 			attachment = "tacknifemp412";
 		}
 	}
-	if(check_weapons(weapon + "_" + attachment + weapon_camo)) {
-		weapon_attached = weapon + "_" + attachment + weapon_camo;
+
+	if(check_weapons(weapon + "_" + weapon_scope + attachment + weapon_camo)) {
+		weapon_attached = weapon + "_" + weapon_scope + attachment + weapon_camo;
 		self take_weapon(self getCurrentWeapon());
 		self give_weapon(weapon_attached);
 	} else {
@@ -1918,9 +1899,8 @@ cycle_camos_loop() {
 	self endon("game_ended");
 
 	for(;;) {
-		for(i = 1; i <= 45; i++) {
+		for(i = 1; i < 45; i++) {
 			equip_camo(i);
-			iPrintString(i);
 			wait 0.2;
 		}
 	}
@@ -2031,7 +2011,6 @@ set_challenges() { // Retropack
 	self notify("stop_updating_status");
 	iPrintString("Unlock All Completed");
 	self.god_mode = false;
-	setDvar("xblive_privatematch", 1);
 	exitLevel(0);
 }
 
