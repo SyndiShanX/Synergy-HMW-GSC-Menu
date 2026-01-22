@@ -1412,6 +1412,29 @@ menu_option() {
 
 // Misc Options
 
+player_option(menu, player) {
+	if(!isDefined(menu) || !isDefined(player) || !isPlayer(player)) {
+		menu = "Error";
+	}
+
+	switch (menu) {
+		case "Player Option":
+			self add_menu(clean_name(player get_name()));
+			break;
+		case "Error":
+			self add_menu();
+			self add_option("Oops, Something Went Wrong!", "Condition: Undefined");
+			break;
+		default:
+			error = true;
+			if(error) {
+				self add_menu("Critical Error");
+				self add_option("Oops, Something Went Wrong!", "Condition: Menu Index");
+			}
+			break;
+	}
+}
+
 return_toggle(variable) {
 	return isDefined(variable) && variable;
 }
