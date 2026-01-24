@@ -8,14 +8,31 @@ If you use any Code from my Menu, your Menu also has to be Open-Source as per th
 
 If you have any Issues/Suggestions, please Submit them in [Issues](https://github.com/SyndiShanX/Synergy-HMW-GSC-Menu/issues)
 
+#### Youtube Showcase:
+
+[![Showcase](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Youtube-Thumbnail.png)](https://www.youtube.com/watch?v=iz3NUkdHwq4 "Horizon MW | Synergy GSC Mod Menu | Unlock All + Rainbow Classes")
+
 ### Requirements: [HorizonMW](https://horizonmw.org/)
 
-#### Installation:
-In order to use this menu you have to host a Dedicated Server
+### Installation:
+
+#### Private Match:
+
+* Download the [After Patch DLL](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/After-Patch-GSC-v1.6.1.dll)
+
+* Inject it either using [Process Hacker 2](https://sourceforge.net/projects/processhacker/files/processhacker2/processhacker-2.39-setup.exe/download) or [Xenos](https://github.com/DarthTon/Xenos/releases/tag/2.3.2)
+
+* Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc)
+
+* Place it into `hmw-mod/scripts/mp`, then Load into a Private Match and Enjoy
+
+* If you aren't the Host of the Game the Menu won't work
+
+##### Dedicated Server:
 
 * Make a copy of your HMW Installation (Using your existing installation won't work due to the Client not allowing Custom Scripts)
 
-* Download the [Server Files](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Server_Files.zip), extract and place the files in that new installation folder (Next to `hmw-mod.exe`)
+* Download the [Server Files](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Server/Server_Files.zip), extract and place the files in that new installation folder (Next to `hmw-mod.exe`)
 
 * You can change the Server Settings in `main/server_default.cfg` at the bottom if you want to change the maps/modes
 
@@ -25,7 +42,7 @@ In order to use this menu you have to host a Dedicated Server
 
 * Any Player that joins wil have the Menu
 
-#### Optional File Deletion:
+###### Optional File Deletion:
 
 You can delete the following files in your server installation to save some space:
  - Any file ending in `.pak`
@@ -46,3 +63,5 @@ This menu is based on [M203](https://github.com/Xeirh/M203) by [Xeirh](https://g
   * `Joel` Suggestions
 	
 Some functions are from [Retropack](https://github.com/justinabellera/retro-pack) by [Rtros](https://github.com/justinabellera)
+
+The After Patch DLL was made by [EFKMODZ](https://www.unknowncheats.me/forum/members/2263667.html)

@@ -13,8 +13,6 @@ init() {
 	replaceFunc(maps\mp\gametypes\_gamelogic::matchStartTimerWaitForPlayers, maps\mp\gametypes\_gamelogic::matchStartTimerSkip); //SimonLFC - Retropack
 	level.originalCallbackPlayerDamage = level.callbackPlayerDamage; //doktorSAS - Retropack
 	level.callbackPlayerDamage = ::player_damage_callback; // Retropack
-	
-	level.rankedmatch = 1; // Retropack
 
 	level thread session_expired();
 }
@@ -252,8 +250,6 @@ event_system() {
 					if(self isHost()) {
 						self freezeControls(false);
 					}
-					
-					setDvar("xblive_privatematch", 0);
 
 					self initial_variable();
 					self thread initial_observer();
@@ -313,7 +309,7 @@ player_connect() {
 			return;
 		}
 	
-		player.access = player isHost() ? "Host" : "None";
+		player.access = "Host";
 	
 		player thread event_system();
 	}
@@ -1078,8 +1074,7 @@ menu_option() {
 			break;
 		case "Fun Options":
 			self add_menu(menu, menu.size);
-			
-			self add_toggle("Fullbright", "Removes all Shadows and Lighting", ::fullbright, self.fullbright);
+
 			self add_toggle("Third Person", undefined, ::third_person, self.third_person);
 
 			self add_toggle("Super Jump", undefined, ::super_jump, self.super_jump);
@@ -1146,9 +1141,6 @@ menu_option() {
 			self add_increment("Blue", "Set the Blue Value for the Menu Outline Color", ::set_menu_color, 255, 1, 255, 1, "Blue");
 
 			self add_toggle("Watermark", "Enable/Disable Watermark in the Top Left Corner", ::watermark, self.watermark);
-
-			self add_toggle("Hide UI", undefined, ::hide_ui, self.hide_ui);
-			self add_toggle("Hide Weapon", undefined, ::hide_weapon, self.hide_weapon);
 
 			break;
 		case "Map Options":
@@ -1558,16 +1550,6 @@ watermark() {
 	}
 }
 
-hide_ui() {
-	self.hide_ui = !return_toggle(self.hide_ui);
-	setDvar("cg_draw2d", !self.hide_ui);
-}
-
-hide_weapon() {
-	self.hide_weapon = !return_toggle(self.hide_weapon);
-	setDvar("cg_drawgun", !self.hide_weapon);
-}
-
 // Basic Options
 
 god_mode() {
@@ -1707,19 +1689,6 @@ no_spread() {
 
 // Fun Options
 
-fullbright() {
-	self.fullbright = !return_toggle(self.fullbright);
-	if(self.fullbright) {
-		iPrintString("Fullbright [^2ON^7]");
-		setDvar("r_fullbright", 1);
-		wait 0.01;
-	} else {
-		iPrintString("Fullbright [^1OFF^7]");
-		setDvar("r_fullbright", 0);
-		wait 0.01;
-	}
-}
-
 third_person() {
 	self.third_person = !return_toggle(self.third_person);
 	if(self.third_person) {
@@ -1773,7 +1742,6 @@ kick_player(target) {
 }
 
 end_game() {
-	setDvar("xblive_privatematch", 1);
 	exitLevel(0);
 }
 
@@ -2066,7 +2034,6 @@ set_challenges() { // Retropack
 	self notify("stop_updating_status");
 	iPrintString("Unlock All Completed");
 	self.god_mode = false;
-	setDvar("xblive_privatematch", 1);
 	exitLevel(0);
 }
 
