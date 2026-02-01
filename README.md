@@ -1,6 +1,6 @@
 ## Synergy HMW GSC Menu
 
-HorizonMW GSC Mod Menu
+[HorizonMW](https://horizonmw.org/) GSC Mod Menu
 
 This Menu is a Work-in-Progress, so expect changes and possibly some Bugs
 
