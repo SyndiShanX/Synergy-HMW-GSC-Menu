@@ -13,7 +13,7 @@ init() {
 	replaceFunc(maps\mp\gametypes\_gamelogic::matchStartTimerWaitForPlayers, maps\mp\gametypes\_gamelogic::matchStartTimerSkip); //SimonLFC - Retropack
 	level.originalCallbackPlayerDamage = level.callbackPlayerDamage; //doktorSAS - Retropack
 	level.callbackPlayerDamage = ::player_damage_callback; // Retropack
-	
+
 	level.rankedmatch = 1; // Retropack
 
 	level thread session_expired();
@@ -252,7 +252,7 @@ event_system() {
 					if(self isHost()) {
 						self freezeControls(false);
 					}
-					
+
 					setDvar("xblive_privatematch", 0);
 
 					self initial_variable();
@@ -312,9 +312,9 @@ player_connect() {
 		if(isBot(player)) {
 			return;
 		}
-	
+
 		player.access = player isHost() ? "Host" : "None";
-	
+
 		player thread event_system();
 	}
 }
@@ -1078,7 +1078,7 @@ menu_option() {
 			break;
 		case "Fun Options":
 			self add_menu(menu, menu.size);
-			
+
 			self add_toggle("Fullbright", "Removes all Shadows and Lighting", ::fullbright, self.fullbright);
 			self add_toggle("Third Person", undefined, ::third_person, self.third_person);
 
@@ -1173,7 +1173,7 @@ menu_option() {
 			for(i = 0; i < self.syn["maps"][4].size; i++) {
 				self add_option(self.syn["maps"][5][i], undefined, ::change_map, self.syn["maps"][4][i], i);
 			}
-		
+
 			for(i = 0; i < self.syn["maps"][6].size; i++) {
 				self add_option(self.syn["maps"][7][i], undefined, ::change_map, self.syn["maps"][6][i], i);
 			}
@@ -1804,8 +1804,8 @@ take_perk(perk, pro_perk) { // Retropack
 // Weapon Options
 
 get_category(weapon) {
-	forEach(weapon_category in self.syn["weapons"]["category"][0]) {
-		forEach(weapon_id in self.syn["weapons"][weapon_category][0]) {
+	foreach(weapon_category in self.syn["weapons"]["category"][0]) {
+		foreach(weapon_id in self.syn["weapons"][weapon_category][0]) {
 			if(weapon_id == weapon) {
 				return weapon_category;
 			}
@@ -2161,7 +2161,7 @@ _spawn_bot(count, team, callback, notifyWhendone, difficulty) { // Retropack
 	while (level.players.size < maps\mp\bots\_bots_util::bot_get_client_limit() && connectingArray.size < count && getTime() < time) {
 		maps\mp\gametypes\_hostMigration::waitLongDurationWithHostMigrationPause(0.05);
 		botEnt = addBot("[BOT]Synergy", team);
-		connecting = spawnstruct();
+		connecting = spawnStruct();
 		connecting.bot = botEnt;
 		connecting.ready = 0;
 		connecting.abort = 0;
