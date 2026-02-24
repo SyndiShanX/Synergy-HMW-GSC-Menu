@@ -1745,6 +1745,11 @@ infinite_ammo_loop() {
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999);
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "left");
 		self setWeaponAmmoClip(self getCurrentWeapon(), 999, "right");
+		
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999);
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "left");
+		self setWeaponAmmoStock(self getCurrentWeapon(), 999, "right");
+		
 		wait 0.2;
 	}
 }
@@ -1869,8 +1874,6 @@ give_killstreak(streak) {
 }
 
 // Perks
-
-self add_option(self.syn["perks"][3][i], undefined, ::give_perk, self.syn["perks"][0][i], self.syn["perks"][2][i]);
 
 give_all_perks() {
 	for(i = 0; i < self.syn["perks"][0].size; i++) {
