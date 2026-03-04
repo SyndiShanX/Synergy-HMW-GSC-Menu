@@ -20,7 +20,7 @@ If you have any Issues/Suggestions, please Submit them in [Issues](https://githu
 
 * Download the [After Patch DLL](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/After-Patch-GSC-v1.6.1.dll)
 
-* Inject it either using [Process Hacker 2](https://sourceforge.net/projects/processhacker/files/processhacker2/processhacker-2.39-setup.exe/download) or [Xenos](https://github.com/DarthTon/Xenos/releases/tag/2.3.2)
+* Rename it to `DEVOBJ.dll` and place it in your game folder, next to `hmw-mod.exe`
 
 * Download [Synergy.gsc](https://syndishanx.github.io/Synergy-HMW-GSC-Menu/Synergy.gsc)
 
