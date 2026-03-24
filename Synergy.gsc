@@ -1298,7 +1298,7 @@ menu_option() {
 	    self add_menu(menu);
 
 	    foreach(player in level.players){
-	      self add_option(player.name, undefined, ::new_menu, "Player Option", player);
+	      self add_option(player.name, undefined, ::new_menu, "Player Option");
 	    }
 
 	    break;
