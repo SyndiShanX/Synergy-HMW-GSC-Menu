@@ -23,7 +23,7 @@ initial_variables() {
 	self.in_menu = false;
 	self.hud_created = false;
 	self.loaded_offset = false;
-	self.option_limit = 6;
+	self.option_limit = 5;
 	self.current_menu = "Synergy";
 	self.structure = [];
 	self.previous = [];
